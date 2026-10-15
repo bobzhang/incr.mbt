@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b131e">
+  <title>Dispatch — an incremental city</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-icon">↗</span> DISPATCH <span class="lab">LAB / 01</span></a>
+    <div class="top-meta"><span class="live-dot"></span> LIVE MOONBIT ENGINE <a href="https://github.com/bobzhang/incr.mbt/tree/main/examples/dispatch" target="_blank" rel="noreferrer">View source ↗</a></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">A DELIVERY NETWORK. A LIVING DEPENDENCY GRAPH.</div><h1>A small change.<br><span>A smaller recomputation.</span></h1><p>Close a bridge. Change a price. Watch 600 delivery quotes stay correct<br class="desktop-break"> while the engine reuses the work you already paid for.</p></div>
+      <div class="hero-action"><button class="primary" id="story" data-action="story">▶ Play the 5-step story</button><span>Real calculations. No simulated counters.</span></div>
+    </section>
+    <div class="metrics" aria-live="polite">
+      <article class="metric"><div class="metric-label">CALCULATIONS RERUN</div><div class="metric-number"><span id="rerun">—</span><small id="baseline"> / —</small></div><div class="metric-note">vs. a full evaluation of this view</div></article>
+      <article class="metric"><div class="metric-label">REUSED WORK</div><div class="metric-number mint" id="reuse">—</div><div class="reuse-track"><div id="reuse-bar"></div></div></article>
+      <article class="metric"><div class="metric-label">QUOTED DELIVERY TOTAL</div><div class="metric-number" id="total">—</div><div class="metric-note" id="order-count">600 deliveries · fictional manifest</div></article>
+      <article class="metric verification"><div class="metric-label">INDEPENDENT FULL CHECK</div><div class="verified" id="verified">Loading engine…</div><div class="metric-note" id="verify-detail">Every quote checked against a plain evaluator</div></article>
+    </div>
+    <div class="workspace">
+      <aside class="controls panel">
+        <div class="panel-heading"><h2>Change the city</h2><button class="text-button" data-action="reset">Reset ↺</button></div>
+        <div class="control-section">
+          <div class="control-label"><span>East bridge</span><span id="bridge-status" class="tag">OPEN</span></div>
+          <p class="hint">A closure adds a detour to eastbound deliveries.</p>
+          <button class="wide-button" id="bridge-toggle" data-action="bridge">Close the bridge <span>↗</span></button>
+        </div>
+        <div class="control-section">
+          <label class="control-label" for="fuel"><span>Fuel price / litre</span><strong id="fuel-value">$1.50</strong></label>
+          <input id="fuel" type="range" min="50" max="300" step="5" value="150" aria-label="Fuel price in cents per litre">
+          <div class="range-labels"><span>$0.50</span><span>Affects every active quote</span><span>$3.00</span></div>
+        </div>
+        <div class="control-section"><div class="control-label"><span>Depots & local traffic</span><span class="micro">+ MINUTES</span></div><div id="depot-controls"></div></div>
+        <div class="control-section experiments"><span class="eyebrow">TWO QUIETER EXPERIMENTS</span><button id="rename" data-action="rename">Rename Central Hub <span>↗</span></button><p class="hint">Names change. The availability projection does not.</p><button data-action="equal">Write the same fuel price <span>↗</span></button><p class="hint">An equal input should trigger zero calculations.</p></div>
+        <div class="scope-note"><span>↳</span><p>Only the selected view is demanded. Hidden areas keep their cached work until you need them.</p></div>
+      </aside>
+      <section class="visuals">
+        <article class="map-panel panel">
+          <div class="panel-heading map-heading"><div><span class="eyebrow">NORTHBANK / FICTIONAL CITY</span><h2>Live service map</h2></div><div class="segmented" aria-label="Demanded service area"><button data-action="region" data-value="-1" aria-pressed="true">All areas</button><button data-action="region" data-value="0" aria-pressed="false">West</button><button data-action="region" data-value="1" aria-pressed="false">Central</button><button data-action="region" data-value="2" aria-pressed="false">East</button></div></div>
+          <svg id="city-map" viewBox="0 0 900 400" role="img" aria-label="Fictional delivery map; orange delivery dots were recalculated, green dots reused cached results, gray dots are not demanded"></svg>
+          <div class="map-footer"><div class="legend"><span><i class="orange-dot"></i> Recalculated</span><span><i class="mint-dot"></i> Cached</span><span><i class="muted-dot"></i> Not demanded</span></div><div><span id="late">—</span> at risk <span class="divider">/</span> <span id="unavailable">—</span> unassigned</div></div>
+        </article>
+        <article class="event-panel" aria-live="polite"><div class="event-icon">↳</div><div><div class="event-kicker" id="event-kicker">ENGINE START</div><h3 id="event-title">Preparing the first delivery plan…</h3><p id="event-detail">The first demand computes everything once.</p></div><span id="event-sequence" class="event-sequence">01</span></article>
+        <article class="graph-panel panel">
+          <div class="panel-heading"><div><span class="eyebrow">THE WORK, NOT JUST THE OUTPUT</span><h2>600 cached quote calculations</h2></div><span class="tag neutral" id="graph-size">613 graph nodes</span></div>
+          <div class="pipeline"><span>9 input cells</span><b>→</b><span>3 route plans</span><b>→</b><span>600 quotes</span><b>→</b><span>1 selected-view summary</span></div>
+          <div class="quote-grids" id="quote-grids"></div>
+          <p class="graph-caption">Each tile is one real MoonBit thunk. Orange means its body ran during the last action. Counts include route and summary calculations.</p>
+        </article>
+      </section>
+    </div>
+    <section class="manifest panel">
+      <div class="panel-heading"><div><span class="eyebrow">CHECK THE ACTUAL OUTPUT</span><h2>Delivery manifest</h2></div><span id="manifest-count" class="micro">FIRST 12 OF 600 DELIVERIES</span></div>
+      <div class="table-scroll"><table><thead><tr><th>Shipment</th><th>Service area</th><th>Assigned depot</th><th>ETA</th><th>Delivery quote</th><th>This action</th></tr></thead><tbody id="manifest-body"></tbody></table></div>
+    </section>
+    <footer><span>Built with <a href="https://github.com/bobzhang/incr.mbt" target="_blank" rel="noreferrer">incr.mbt</a> · MoonBit compiled to JavaScript</span><span>Synthetic data · integer pricing · independent result verification</span></footer>
+    <details class="method"><summary>How to read this demonstration</summary><p>These are computation counts, not a timing benchmark. The independent evaluator calculates the same selected view from scratch with ordinary values, sharing each service-area plan once. Every quote and visible plan must match exactly. The UI does not implement incremental caching: the compiled MoonBit engine does. The city and manifest are fictional; the planning rules model service areas and fallback depots, not a global vehicle-routing optimizer.</p></details>
+    <div id="error" role="alert" hidden></div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
