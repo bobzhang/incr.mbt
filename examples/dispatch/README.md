@@ -1,6 +1,6 @@
 # Dispatch: a city that only recalculates what changed
 
-An interactive delivery operations dashboard backed by the real `dii/incr`
+An interactive delivery operations dashboard backed by the real `bobzhang/incr`
 MoonBit engine, compiled to JavaScript. A fictional city has 600 shipments,
 9,600 manifest lines, three depots, traffic delays, fuel pricing, and a bridge
 that can close. Change an input and see exactly which cached calculations rerun.

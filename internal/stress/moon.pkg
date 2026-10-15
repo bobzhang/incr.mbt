@@ -1,4 +1,4 @@
 import {
-  "dii/incr",
-  "dii/incr/catalog",
+  "bobzhang/incr",
+  "bobzhang/incr/catalog",
 }

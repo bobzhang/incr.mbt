@@ -1,4 +1,4 @@
-name = "dii/incr"
+name = "bobzhang/incr"
 
 version = "0.1.0"
 

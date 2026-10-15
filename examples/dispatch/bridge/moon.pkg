@@ -1,5 +1,5 @@
 import {
-  "dii/incr/examples/dispatch/model",
+  "bobzhang/incr/examples/dispatch/model",
 }
 
 pkgtype(kind: "foreign_library")

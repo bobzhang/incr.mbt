@@ -1,6 +1,6 @@
 # Incremental collections
 
-Import `dii/incr/catalog` along with `dii/incr`.
+Import `bobzhang/incr/catalog` along with `bobzhang/incr`.
 
 A named node marks a reuse boundary. An articulation points to either a mutable
 input or another computation. Collection values are persistent: replace a cell's

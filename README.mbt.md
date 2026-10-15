@@ -8,6 +8,14 @@ There are no external dependencies.
 The port is based on the local Rust Adapton 0.3.31 reference in `.repos/adapton`.
 The API is adapted to MoonBit; see [PORTING.md](PORTING.md) for coverage and differences.
 
+## Install
+
+```sh
+moon add bobzhang/incr
+```
+
+Import `"bobzhang/incr"` in your package's `moon.pkg` to use `@incr`.
+
 ## Interactive example: delivery dispatch
 
 [Dispatch](examples/dispatch/README.md) is a city dashboard with 600 delivery
@@ -112,7 +120,7 @@ test "readme projection" {
 
 ## Collections and inspection
 
-The `dii/incr/catalog` package includes named articulated lists, lazy mapping and
+The `bobzhang/incr/catalog` package includes named articulated lists, lazy mapping and
 filtering, trees, memoized tree folds and merge sort, persistent hash trie sets,
 and bit strings. See the [collection examples](catalog/README.mbt.md).
 

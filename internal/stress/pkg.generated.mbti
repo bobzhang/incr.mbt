@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "dii/incr/internal/stress"
+package "bobzhang/incr/internal/stress"
 
 // Values
 pub fn collections(UInt, Int) -> Int64 raise

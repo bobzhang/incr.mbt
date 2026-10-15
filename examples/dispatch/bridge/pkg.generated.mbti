@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "dii/incr/examples/dispatch/bridge"
+package "bobzhang/incr/examples/dispatch/bridge"
 
 // Values
 pub fn reset() -> String
