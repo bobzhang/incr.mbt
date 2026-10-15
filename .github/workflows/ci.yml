@@ -67,3 +67,5 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Check benchmark outputs against independent oracle
         run: python3 bench/compare/run.py --quick --repeats 1 --warmups 0
+      - name: Run isolated randomized stress smoke checks
+        run: python3 stress/run.py --profile smoke

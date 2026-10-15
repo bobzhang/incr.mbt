@@ -2,7 +2,15 @@
 package "dii/incr/internal/stress"
 
 // Values
+pub fn collections(UInt, Int) -> Int64 raise
+
+pub fn depth(UInt, Int) -> Int64 raise
+
 pub fn engine(UInt, Int) -> Int64 raise
+
+pub fn growing(UInt, Int) -> Int64 raise
+
+pub fn lifecycle(UInt, Int) -> Int64 raise
 
 pub fn nominal(UInt, Int) -> Int64 raise
 

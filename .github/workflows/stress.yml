@@ -1,0 +1,32 @@
+name: Extended stress
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  soak:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install pinned MoonBit
+        env:
+          MOONBIT_INSTALL_VERSION: 0.10.15+943464bfa
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Differential tests and five-minute soak
+        run: python3 stress/run.py --profile full --soak-seconds 300
+      - name: Preserve seed replay and memory results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stress-${{ matrix.os }}
+          path: _build/stress-results.json
