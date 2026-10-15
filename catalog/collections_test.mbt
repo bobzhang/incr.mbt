@@ -10,7 +10,7 @@ test "list conversion fold merge and basic operations" {
   assert_eq(xs.merge(@catalog.List::from_array([2, 4])).to_array(), [
     1, 2, 2, 3, 4,
   ])
-  assert_true((@catalog.List::Nil : @catalog.List[Int32]).is_empty())
+  assert_true((Nil : @catalog.List[Int32]).is_empty())
 }
 
 ///|

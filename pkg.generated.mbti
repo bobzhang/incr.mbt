@@ -51,9 +51,10 @@ pub struct Engine {
   // private fields
 }
 pub fn[T] Engine::cell(Self, T) -> Art[T]
-pub fn Engine::new() -> Self
+pub fn Engine::new(naive? : Bool) -> Self
 pub fn[T] Engine::ns(Self, Name, () -> T raise?) -> T raise?
 pub fn[T] Engine::put(Self, T) -> Art[T]
+pub fn Engine::snapshot(Self) -> Array[NodeInfo]
 pub fn Engine::stats(Self) -> Stats
 pub fn[T] Engine::thunk(Self, () -> T) -> Art[T]
 
@@ -79,6 +80,17 @@ pub fn Name::hash(Self) -> Int
 pub fn Name::hash_combine(Self, Hasher) -> Unit
 pub fn Name::not_equal(Self, Self) -> Bool
 pub fn Name::to_repr(Self) -> @debug.Repr
+
+pub struct NodeInfo {
+  id : Int
+  kind : String
+  path : Array[Name]
+  dirty : Bool
+  dependencies : Array[Int]
+} derive(Eq, @debug.Debug)
+pub fn NodeInfo::equal(Self, Self) -> Bool
+pub fn NodeInfo::not_equal(Self, Self) -> Bool
+pub fn NodeInfo::to_repr(Self) -> @debug.Repr
 
 pub struct Stats {
   allocated : Int

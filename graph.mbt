@@ -31,6 +31,7 @@ priv struct Edge {
 /// An independent, synchronous incremental computation graph.
 /// Use one engine for all articulations in a computation.
 pub struct Engine {
+  priv naive : Bool
   priv id : Int32
   priv current : Ref[Node?]
   priv path : Ref[Array[Name]]
@@ -49,11 +50,12 @@ let next_engine : Ref[Int32] = Ref(0)
 let executing_engine : Ref[Int32?] = Ref(None)
 
 ///|
-pub fn Engine::new() -> Engine {
+pub fn Engine::new(naive~ : Bool = false) -> Engine {
   let id = next_engine.val
   next_engine.val += 1
   {
     id,
+    naive,
     current: Ref(None),
     path: Ref([]),
     nodes: [],
