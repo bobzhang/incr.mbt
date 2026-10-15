@@ -48,3 +48,22 @@ jobs:
         run: moon test --target native
       - name: Run example
         run: moon run cmd/demo
+
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check out pinned Rust reference
+        uses: actions/checkout@v5
+        with:
+          repository: Adapton/adapton.rust
+          ref: ea903dd961bee3568c483a18a72983d9f4ef5ed2
+          path: .repos/adapton
+      - name: Install pinned MoonBit
+        env:
+          MOONBIT_INSTALL_VERSION: 0.10.15+943464bfa
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Check benchmark outputs against independent oracle
+        run: python3 bench/compare/run.py --quick --repeats 1 --warmups 0
