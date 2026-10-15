@@ -1,0 +1,5 @@
+import {
+  "dii/incr",
+}
+
+pkgtype(kind: "executable")
