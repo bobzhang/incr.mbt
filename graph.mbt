@@ -19,12 +19,19 @@ priv struct Node {
 }
 
 ///|
+priv enum Effect {
+  Observe
+  Allocate
+}
+
+///|
 priv struct Edge {
   id : Int32
   source : Node
   target : Node
   differs : () -> Bool
   immediate : Bool
+  effect : Effect
 }
 
 ///|
@@ -105,9 +112,17 @@ fn Engine::observe(
   target : Node,
   differs : () -> Bool,
   immediate : Bool,
+  effect : Effect,
 ) -> Unit {
   if self.current.val is Some(source) {
-    let edge = { id: self.next_edge, source, target, differs, immediate, }
+    let edge = {
+      id: self.next_edge,
+      source,
+      target,
+      differs,
+      immediate,
+      effect,
+    }
     self.next_edge += 1
     source.deps.push(edge)
     target.users[edge.id] = edge
@@ -147,7 +162,11 @@ fn Engine::dirty_users(self : Engine, node : Node) -> Unit {
       next.dirty = true
       self.dirtyings += 1
       for _, edge in next.users {
-        pending.push(edge.source)
+        // A dirty result affects observers, not callers that only allocated
+        // this thunk. Its arguments have not changed in this propagation step.
+        if edge.effect is Observe {
+          pending.push(edge.source)
+        }
       }
     }
   }

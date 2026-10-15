@@ -75,7 +75,7 @@ pub fn[A : Eq, T] Memo::named(
       entry
     }
   }
-  e.observe(entry.art.node, () => entry.arg.val != arg, true)
+  e.observe(entry.art.node, () => entry.arg.val != arg, true, Allocate)
   entry.art
 }
 

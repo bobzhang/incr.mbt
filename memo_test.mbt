@@ -131,3 +131,41 @@ test "cleaning may update a cell observed by its validating parent" {
   input.set(2)
   assert_eq(root.force(), 20)
 }
+
+///|
+test "review allocation-only edge must not observe result changes" {
+  let e = @incr.Engine::new()
+  let cells = @incr.Cells::new(e)
+  let cell_name = @incr.name_of_string("input")
+  let x = cells.cell(cell_name, 0)
+  let memo = @incr.Memo::new(e, (_ : Unit) => x.force())
+  let thunk_name = @incr.name_of_string("child")
+  assert_eq(memo.named(thunk_name, ()).force(), 0)
+  let parent = e.thunk(() => {
+    let child = memo.named(thunk_name, ())
+    ignore(cells.cell(cell_name, 1))
+    child.force()
+  })
+  assert_eq(parent.force(), 1)
+}
+
+///|
+test "result edits leave allocation-only parents clean but argument edits invalidate them" {
+  let e = @incr.Engine::new()
+  let input = e.cell(1)
+  let memo = @incr.Memo::new(e, (x : Int32) => x + input.force())
+  let name = @incr.name_unit()
+  let parent = e.thunk(() => memo.named(name, 10))
+  let child = parent.force()
+  assert_eq(child.force(), 11)
+  let before = e.stats().evaluations
+  input.set(2)
+  assert_true(parent.force() == child)
+  assert_eq(e.stats().evaluations, before)
+  assert_eq(child.force(), 12)
+  ignore(memo.named(name, 20))
+  assert_eq(child.force(), 22)
+  assert_true(parent.force() == child)
+  assert_eq(child.force(), 12)
+  e.dispose()
+}

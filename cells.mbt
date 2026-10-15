@@ -40,7 +40,7 @@ pub fn[T : Eq] Cells::cell(self : Cells[T], name : Name, value : T) -> Art[T] {
       art
     }
   }
-  e.observe(art.node, () => art.value != Some(value), true)
+  e.observe(art.node, () => art.value != Some(value), true, Allocate)
   art
 }
 

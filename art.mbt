@@ -152,7 +152,12 @@ pub fn[T : Eq] Art::force(self : Art[T]) -> T {
 pub fn[T : Eq] Art::force_cycle(self : Art[T], fallback : T?) -> T {
   let value = self.read(fallback)
   if !(self.node.kind is Constant) {
-    self.engine.observe(self.node, () => self.read(fallback) != value, false)
+    self.engine.observe(
+      self.node,
+      () => self.read(fallback) != value,
+      false,
+      Observe,
+    )
   }
   value
 }
@@ -167,6 +172,7 @@ pub fn[T, U : Eq] Art::force_map(self : Art[T], map : (T) -> U) -> U {
       self.node,
       () => map(self.read(None)) != value,
       self.node.kind is Cell,
+      Observe,
     )
   }
   value
