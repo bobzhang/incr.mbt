@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dii/incr"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn name_fork(Name) -> (Name, Name)
+
+pub fn name_fork3(Name) -> (Name, Name, Name)
+
+pub fn name_fork4(Name) -> (Name, Name, Name, Name)
+
+pub fn name_of_int(Int) -> Name
+
+pub fn name_of_string(String) -> Name
+
+pub fn name_pair(Name, Name) -> Name
+
+pub fn name_unit() -> Name
+
+// Errors
+
+// Types and methods
+pub(all) enum Name {
+  Unit
+  Int(Int)
+  Text(String)
+  Pair(Name, Name)
+  Left(Name)
+  Right(Name)
+} derive(Eq, Hash, @debug.Debug)
+pub fn Name::equal(Self, Self) -> Bool
+pub fn Name::hash(Self) -> Int
+pub fn Name::hash_combine(Self, Hasher) -> Unit
+pub fn Name::not_equal(Self, Self) -> Bool
+pub fn Name::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
