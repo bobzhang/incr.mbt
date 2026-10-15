@@ -45,7 +45,7 @@ impl Hash for Collision with fn hash_combine(_self, hasher) {
 ///|
 test "structural memo handles hash collisions using equality" {
   let e = @incr.Engine()
-  let memo = @incr.Memo::new(e, (x : Collision) => x.0 * 2)
+  let memo = @incr.Memo(e, (x : Collision) => x.0 * 2)
   let a = memo.structural(Collision(1))
   let b = memo.structural(Collision(2))
   assert_true(a != b)
@@ -86,7 +86,7 @@ test "multiple projection observations are retained independently" {
 ///|
 test "namespaces restore after checked errors" {
   let e = @incr.Engine()
-  let cells = @incr.Cells::new(e)
+  let cells = @incr.Cells(e)
   let name = @incr.name_unit()
   let original = cells.cell(name, 42)
   e.ns(name, () => fail("expected")) catch {
@@ -99,10 +99,10 @@ test "namespaces restore after checked errors" {
 test "generated named overwrite traces agree with a direct evaluation oracle" {
   let e = @incr.Engine()
   let input = e.cell((0, 0, true, 0))
-  let outputs = @incr.Cells::new(e)
+  let outputs = @incr.Cells(e)
   let child_name = @incr.name_of_string("child")
   let output_name = @incr.name_of_string("output")
-  let memo = @incr.Memo::new(e, (bias : Int32) => {
+  let memo = @incr.Memo(e, (bias : Int32) => {
     let (a, b, choose, _) = input.force()
     if choose {
       a + bias

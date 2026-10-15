@@ -51,12 +51,12 @@ pub fn[T : Eq] list_of_tree(
   engine : @incr.Engine,
   reverse~ : Bool = false,
 ) -> @incr.Memo[Tree[T], List[T]] {
-  let cells = @incr.Cells::new(engine)
+  let cells = @incr.Cells(engine)
   let leaf = (x, tail) => List::Cons(x, tail)
   let bin = (_, tail) => tail
   let name = (name, _, tail) => List::Named(name, Art(cells.cell(name, tail)))
   let worker = tree_fold_seq(engine, reverse=!reverse, leaf~, bin~, name~)
-  @incr.Memo::new(engine, tree => {
+  Memo(engine, tree => {
     fold_tree_seq(worker, tree, Nil, !reverse, leaf, bin, name)
   })
 }

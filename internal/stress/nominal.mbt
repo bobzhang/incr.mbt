@@ -9,15 +9,15 @@ impl Hash for Collision with fn hash_combine(_self, hasher) {
 ///|
 /// Replay scoped name conflicts and allocator restoration against direct values.
 pub fn nominal(seed : UInt32, steps : Int32) -> Int64 raise {
-  let rng = Random::new(seed)
+  let rng = Random(seed)
   let e = @incr.Engine()
   let values = Array::makei(8, _ => rng.pick(101) - 50)
   let inputs = values.map(x => e.cell(x))
   // (scope, name, source, bias). Different producers intentionally share names.
   let settings = Array::makei(12, i => (i % 3, i % 4, i % 8, i))
   let controls = settings.map(x => e.cell(x))
-  let outputs = @incr.Cells::new(e)
-  let memo = @incr.Memo::new(e, (arg : (Int32, Int32)) => {
+  let outputs = @incr.Cells(e)
+  let memo = @incr.Memo(e, (arg : (Int32, Int32)) => {
     inputs[arg.0].force() * 3 + arg.1
   })
   let roots = controls.map(control => {
@@ -31,7 +31,7 @@ pub fn nominal(seed : UInt32, steps : Int32) -> Int64 raise {
     })
     e.thunk(() => producer.force().force())
   })
-  let structural = @incr.Memo::new(e, (arg : Collision) => {
+  let structural = @incr.Memo(e, (arg : Collision) => {
     inputs[arg.0 % 8].force() + arg.0
   })
   let mut checksum = 0L

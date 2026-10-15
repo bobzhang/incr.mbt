@@ -43,9 +43,9 @@ pub impl[T] @debug.Debug for Art[T]
 pub struct Cells[T] {
   // private fields
 }
+pub fn[T] Cells::Cells(Engine) -> Self[T]
 pub fn[T : Eq] Cells::cell(Self[T], Name, T) -> Art[T]
 pub fn[T : Hash + Eq] Cells::intern(Self[T], T) -> Art[T]
-pub fn[T] Cells::new(Engine) -> Self[T]
 
 pub struct Engine {
   // private fields
@@ -62,9 +62,9 @@ pub fn[T] Engine::thunk(Self, () -> T) -> Art[T]
 pub struct Memo[A, T] {
   // private fields
 }
+pub fn[A, T] Memo::Memo(Engine, (A) -> T) -> Self[A, T]
 pub fn[A : Hash + Eq, T : Eq] Memo::call(Self[A, T], A) -> T
 pub fn[A : Eq, T] Memo::named(Self[A, T], Name, A) -> Art[T]
-pub fn[A, T] Memo::new(Engine, (A) -> T) -> Self[A, T]
 pub fn[A, T] Memo::recursive(Engine, (Self[A, T], A) -> T) -> Self[A, T]
 pub fn[A : Hash + Eq, T] Memo::structural(Self[A, T], A) -> Art[T]
 

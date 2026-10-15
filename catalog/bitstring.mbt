@@ -15,7 +15,7 @@ pub extend BitString with Hash::{hash, hash_combine}
 pub extend BitString with Debug::{to_repr}
 
 ///|
-pub fn BitString::new(length : Int32, value : Int32) -> BitString {
+pub fn BitString::BitString(length : Int32, value : Int32) -> BitString {
   guard length >= 0 && length <= 30 else {
     abort("bit string length must be between 0 and 30")
   }
@@ -29,7 +29,7 @@ pub fn BitString::new(length : Int32, value : Int32) -> BitString {
 /// Prepend a most significant bit. The argument must be 0 or 1.
 pub fn BitString::prepend(self : BitString, bit : Int32) -> BitString {
   guard bit == 0 || bit == 1 else { abort("expected a bit") }
-  BitString::new(self.length + 1, self.value | (bit << self.length))
+  BitString(self.length + 1, self.value | (bit << self.length))
 }
 
 ///|
@@ -42,7 +42,7 @@ pub fn BitString::flip(self : BitString, index : Int32) -> BitString {
   guard index >= 0 && index < self.length else {
     abort("bit index out of range")
   }
-  BitString::new(self.length, self.value ^ (1 << index))
+  BitString(self.length, self.value ^ (1 << index))
 }
 
 ///|
@@ -54,5 +54,5 @@ pub fn BitString::shift_left(self : BitString, count : Int32) -> BitString {
   } else {
     (self.value << count) & ((1 << self.length) - 1)
   }
-  BitString::new(self.length, value)
+  BitString(self.length, value)
 }

@@ -28,7 +28,7 @@ test "panic force after disposal" {
 ///|
 test "panic memo allocation after disposal" {
   let e = @incr.Engine()
-  let memo = @incr.Memo::new(e, (x : Int32) => x)
+  let memo = @incr.Memo(e, (x : Int32) => x)
   e.dispose()
   ignore(memo.structural(42))
 }

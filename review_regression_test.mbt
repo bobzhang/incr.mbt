@@ -19,7 +19,7 @@ test "upstream four-node cycle traversal" {
 ///|
 test "equal projection remains stable across other named writes" {
   let e = @incr.Engine()
-  let cells = @incr.Cells::new(e)
+  let cells = @incr.Cells(e)
   let name = @incr.name_unit()
   let pair = cells.cell(name, (1, 2))
   let parent = e.thunk(() => {

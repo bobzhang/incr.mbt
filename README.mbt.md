@@ -56,7 +56,7 @@ test "readme memoization" {
   })
   assert_eq(fib.call(10), 55)
   assert_eq(engine.stats().evaluations, 11)
-  let double = @incr.Memo::new(engine, x => x * 2)
+  let double = @incr.Memo(engine, x => x * 2)
   let name = @incr.name_of_string("answer")
   let answer = double.named(name, 21)
   assert_eq(answer.force(), 42)

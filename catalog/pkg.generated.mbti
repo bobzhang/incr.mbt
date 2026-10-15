@@ -34,12 +34,12 @@ pub struct BitString {
   length : Int
   value : Int
 } derive(Eq, Hash, @debug.Debug)
+pub fn BitString::BitString(Int, Int) -> Self
 pub fn BitString::equal(Self, Self) -> Bool
 pub fn BitString::flip(Self, Int) -> Self
 pub fn BitString::hash(Self) -> Int
 pub fn BitString::hash_combine(Self, Hasher) -> Unit
 pub fn BitString::is_set(Self, Int) -> Bool
-pub fn BitString::new(Int, Int) -> Self
 pub fn BitString::not_equal(Self, Self) -> Bool
 pub fn BitString::prepend(Self, Int) -> Self
 pub fn BitString::shift_left(Self, Int) -> Self

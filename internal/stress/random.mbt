@@ -4,7 +4,7 @@ priv struct Random {
 }
 
 ///|
-fn Random::new(seed : UInt32) -> Random {
+fn Random::Random(seed : UInt32) -> Random {
   { state: if seed == 0U { 0x9e3779b9U } else { seed }, }
 }
 

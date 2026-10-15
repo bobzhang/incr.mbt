@@ -13,7 +13,7 @@ test "composed consumers and branching trie across mixed edits" {
   for seed in [20261016U, 195948557U, 305419896U] {
     let rng = Ref(seed)
     let e = @incr.Engine()
-    let cells = @incr.Cells::new(e)
+    let cells = @incr.Cells(e)
     let input = e.cell(@catalog.List::Nil)
     let parameter = e.cell(0)
     let mapper = @catalog.list_map_lazy(e, (x : Int32) => {

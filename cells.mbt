@@ -8,7 +8,7 @@ pub struct Cells[T] {
 }
 
 ///|
-pub fn[T] Cells::new(engine : Engine) -> Cells[T] {
+pub fn[T] Cells::Cells(engine : Engine) -> Cells[T] {
   engine.check_context()
   let cells = {
     engine,

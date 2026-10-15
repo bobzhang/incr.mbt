@@ -67,7 +67,7 @@ pub fn[T : Eq + Compare] list_merge(
   engine : @incr.Engine,
 ) -> @incr.Memo[(List[T], List[T]), List[T]] {
   let memo = merge_table(engine)
-  @incr.Memo::new(engine, args => merge_lists(memo, None, args.0, None, args.1))
+  Memo(engine, args => merge_lists(memo, None, args.0, None, args.1))
 }
 
 ///|

@@ -80,11 +80,11 @@ pub fn[T : Hash + Eq] tree_of_list(
   engine : @incr.Engine,
   reverse~ : Bool = false,
 ) -> @incr.Memo[List[T], Tree[T]] {
-  let cells = @incr.Cells::new(engine)
+  let cells = @incr.Cells(engine)
   let worker = @incr.Memo::recursive(engine, (memo, args) => {
     build_sequence_tree(memo, cells, args.0, args.1, args.2, args.3, reverse)
   })
-  @incr.Memo::new(engine, input => {
+  Memo(engine, input => {
     let (tree, rest) = build_sequence_tree(
       worker,
       cells,

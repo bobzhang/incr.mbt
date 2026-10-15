@@ -47,7 +47,7 @@ test "generated sequence insert delete replace and move traces preserve all dire
   for layout in 0..<3 {
     for seed in [1, 31, 771] {
       let e = @incr.Engine()
-      let cells = @incr.Cells::new(e)
+      let cells = @incr.Cells(e)
       let input = e.cell(@catalog.List::Nil)
       let builds = [
         @catalog.tree_of_list(e),

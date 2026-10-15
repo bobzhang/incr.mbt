@@ -15,7 +15,7 @@ pub struct Memo[A, T] {
 }
 
 ///|
-pub fn[A, T] Memo::new(engine : Engine, body : (A) -> T) -> Memo[A, T] {
+pub fn[A, T] Memo::Memo(engine : Engine, body : (A) -> T) -> Memo[A, T] {
   engine.check_context()
   let memo = {
     engine,
@@ -38,7 +38,7 @@ pub fn[A, T] Memo::recursive(
   body : (Memo[A, T], A) -> T,
 ) -> Memo[A, T] {
   let link : Ref[Memo[A, T]?] = Ref(None)
-  let memo = Memo::new(engine, arg => body(link.val.unwrap(), arg))
+  let memo = Memo(engine, arg => body(link.val.unwrap(), arg))
   link.val = Some(memo)
   memo
 }

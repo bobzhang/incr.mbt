@@ -4,7 +4,7 @@ fn main {
   let mut sum = 0
   for _ in 0..<runs {
     let e = @incr.Engine()
-    let cells = @incr.Cells::new(e)
+    let cells = @incr.Cells(e)
     let input = cells.cell(@incr.name_unit(), 17)
     let memo = @incr.Memo::recursive(e, (memo, n : Int32) => {
       if n == 0 {

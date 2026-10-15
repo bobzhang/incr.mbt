@@ -58,7 +58,7 @@ test "named trie fold tracks successive edits" {
 
 ///|
 test "bitstring width and upstream prepend shift cases" {
-  let empty = @catalog.BitString::new(0, 0)
+  let empty = @catalog.BitString(0, 0)
   assert_true(empty != empty.prepend(0))
   let bits = empty.prepend(1).prepend(0).prepend(1)
   assert_eq(bits.length, 3)
@@ -66,8 +66,8 @@ test "bitstring width and upstream prepend shift cases" {
   assert_true(bits.is_set(2))
   assert_false(bits.is_set(1))
   assert_eq(bits.flip(1).value, 7)
-  assert_eq(@catalog.BitString::new(2, 3).shift_left(1).value, 2)
-  assert_eq(@catalog.BitString::new(4, 2).shift_left(2).value, 8)
+  assert_eq(@catalog.BitString(2, 3).shift_left(1).value, 2)
+  assert_eq(@catalog.BitString(4, 2).shift_left(2).value, 8)
   assert_eq(bits.shift_left(32).value, 0)
 }
 

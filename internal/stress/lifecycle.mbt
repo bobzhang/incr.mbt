@@ -35,9 +35,9 @@ pub fn depth(seed : UInt32, depth : Int32) -> Int64 raise {
 ///|
 /// Measure deliberate cache growth with unique names, then release the graph.
 pub fn growing(seed : UInt32, steps : Int32) -> Int64 raise {
-  let rng = Random::new(seed)
+  let rng = Random(seed)
   let e = @incr.Engine()
-  let memo = @incr.Memo::new(e, (x : Int32) => x * 2)
+  let memo = @incr.Memo(e, (x : Int32) => x * 2)
   let mut checksum = 0L
   for step in 0..<steps {
     let art = memo.named(@incr.name_of_int(step), step)
@@ -68,8 +68,8 @@ pub fn retained(seed : UInt32, rounds : Int32) -> Int64 raise {
   let mut checksum = 0L
   for round in 0..<rounds {
     let e = @incr.Engine()
-    let cells = @incr.Cells::new(e)
-    let memo = @incr.Memo::new(e, (x : Int32) => x + round)
+    let cells = @incr.Cells(e)
+    let memo = @incr.Memo(e, (x : Int32) => x + round)
     let input = e.cell(round)
     for key in 0..<2048 {
       let name = @incr.name_of_int(key)
