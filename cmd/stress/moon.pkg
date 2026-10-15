@@ -1,0 +1,7 @@
+import {
+  "dii/incr/internal/stress" @checks,
+  "moonbitlang/core/env",
+  "moonbitlang/core/string",
+}
+
+pkgtype(kind: "executable")

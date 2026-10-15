@@ -1,0 +1,15 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dii/incr/internal/stress"
+
+// Values
+pub fn engine(UInt, Int) -> Int64 raise
+
+pub fn nominal(UInt, Int) -> Int64 raise
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
