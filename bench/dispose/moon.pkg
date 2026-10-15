@@ -1,0 +1,8 @@
+import {
+  "dii/incr",
+  "moonbitlang/core/env",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
