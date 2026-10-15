@@ -5,6 +5,9 @@ reference at `ea903dd961bee3568c483a18a72983d9f4ef5ed2`. It measures the actual
 public collection implementations, including their representation and cloning
 costs. It does not substitute a newly optimized Rust implementation.
 
+See [the recorded results](RESULTS.md) for timings, memory scaling, and the
+measurement machine. The raw JSON preserves every measured sample.
+
 ## Reproduce
 
 Requirements: MoonBit, Rust/Cargo, Python 3.9+, and macOS or Linux. From the

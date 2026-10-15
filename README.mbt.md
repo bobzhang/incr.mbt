@@ -151,4 +151,13 @@ GitHub Actions runs formatting, interface checks, all-backend type checking,
 and Wasm GC, JavaScript, and native tests on Linux and macOS, using both the
 pinned `0.10.15+943464bfa` toolchain and latest.
 
+## Benchmarks
+
+The native comparison harness measures collection workloads and whole-process
+peak memory against the pinned, unmodified Rust Adapton reference. It includes
+aggregation, full/prefix sorting, lazy mapping/filtering, sequence edits, and
+repeated engine disposal. Both implementations are checked against an independent
+array oracle. See [reproduction instructions](bench/compare/README.md) and
+[measured results and limitations](bench/compare/RESULTS.md).
+
 License: MPL-2.0, following the Adapton reference. See [LICENSE](LICENSE).
