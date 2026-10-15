@@ -104,13 +104,15 @@ fn[T] Art::read(self : Art[T], cycle : T?) -> T {
           }
           engine.cleanings += 1
         }
-        if rerun {
+        if rerun || node.changed {
           node.detach()
           let compute = self.compute.unwrap()
           engine.evaluations += 1
+          node.evaluating = true
           let value = engine.path.protect(node.path, () => {
             engine.current.protect(Some(node), compute)
           })
+          node.evaluating = false
           self.value = Some(value)
         } else {
           engine.cache_hits += 1

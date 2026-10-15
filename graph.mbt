@@ -12,6 +12,7 @@ priv struct Node {
   path : Array[Name]
   mut dirty : Bool
   mut changed : Bool
+  mut evaluating : Bool
   mut running : Bool
   deps : Array[Edge]
   users : Map[Int32, Edge]
@@ -82,6 +83,7 @@ fn Engine::node(self : Engine, kind : Kind) -> Node {
     path: self.path.val,
     dirty: false,
     changed: false,
+    evaluating: false,
     running: false,
     deps: [],
     users: Map([]),
@@ -123,10 +125,15 @@ fn Engine::dirty_users(self : Engine, node : Node) -> Unit {
     }
   }
   while pending.pop() is Some(next) {
-    guard !next.running else {
+    guard !next.evaluating else {
       engine_abort(
         "a named allocation changed a dependency of an active computation",
       )
+    }
+    // Cleaning can trigger allocations that change an earlier observation.
+    // The validating node must then rerun instead of accepting its old cache.
+    if next.running {
+      next.changed = true
     }
     if !next.dirty {
       next.dirty = true

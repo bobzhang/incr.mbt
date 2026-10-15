@@ -119,3 +119,15 @@ test "panic conflicting name invalidates an active observer" {
   })
   ignore(root.force())
 }
+
+///|
+test "cleaning may update a cell observed by its validating parent" {
+  let e = @incr.Engine::new()
+  let cells = @incr.Cells::new(e)
+  let input = e.cell(1)
+  let producer = e.thunk(() => cells.cell(@incr.name_unit(), input.force() * 10))
+  let root = e.thunk(() => producer.force().force())
+  assert_eq(root.force(), 10)
+  input.set(2)
+  assert_eq(root.force(), 20)
+}
