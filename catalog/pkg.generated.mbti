@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dii/incr/catalog"
+
+import {
+  "dii/incr",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn[T : Eq] list_filter_lazy(@incr.Engine, (T) -> Bool) -> @incr.Memo[List[T], List[T]]
+
+pub fn[A : Eq, B] list_map_lazy(@incr.Engine, (A) -> B) -> @incr.Memo[List[A], List[B]]
+
+pub fn[T : Eq + Compare] mergesort_list_of_tree(@incr.Engine) -> @incr.Memo[Tree[T], List[T]]
+
+pub fn[T : Eq, R : Eq] monoid_of_tree(@incr.Engine, R, (T) -> R, (R, R) -> R) -> @incr.Memo[Tree[T], R]
+
+pub fn[T : Eq, R : Eq] tree_fold_up(@incr.Engine, nil~ : () -> R, leaf~ : (T) -> R, bin~ : (Int, R, R) -> R, name~ : (@incr.Name, Int, R, R) -> R) -> @incr.Memo[Tree[T], R]
+
+// Errors
+
+// Types and methods
+pub(all) enum List[T] {
+  Nil
+  Cons(T, List[T])
+  Named(@incr.Name, List[T])
+  Art(@incr.Art[List[T]])
+} derive(Eq, Hash, @debug.Debug)
+pub fn[T : Eq] List::append(Self[T], Self[T]) -> Self[T]
+pub fn[T : Eq] List::eager(Self[T]) -> Self[T]
+pub fn[T : Eq] List::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq, R] List::fold(Self[T], R, (T, R) -> R) -> R
+pub fn[T] List::from_array(ArrayView[T]) -> Self[T]
+pub fn[T : Hash] List::hash(Self[T]) -> Int
+pub fn[T : Hash] List::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Eq] List::is_empty(Self[T]) -> Bool
+pub fn[T : Compare + Eq] List::merge(Self[T], Self[T]) -> Self[T]
+pub fn[T : Eq] List::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] List::reverse(Self[T]) -> Self[T]
+pub fn[T : Eq] List::to_array(Self[T], limit? : Int) -> Array[T]
+pub fn[T : @debug.Debug] List::to_repr(Self[T]) -> @debug.Repr
+pub fn[T : Eq] List::uncons(Self[T]) -> (T, Self[T])?
+
+pub(all) enum Tree[T] {
+  Nil
+  Leaf(T)
+  Bin(Int, Tree[T], Tree[T])
+  Named(@incr.Name, Int, Tree[T], Tree[T])
+  Art(@incr.Art[Tree[T]])
+} derive(Eq, Hash, @debug.Debug)
+pub fn[T : Eq] Tree::equal(Self[T], Self[T]) -> Bool
+pub fn[T] Tree::from_array(ArrayView[T]) -> Self[T]
+pub fn[T : Hash] Tree::hash(Self[T]) -> Int
+pub fn[T : Hash] Tree::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Eq] Tree::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Tree::to_array(Self[T], reverse? : Bool) -> Array[T]
+pub fn[T : Eq] Tree::to_list(Self[T]) -> List[T]
+pub fn[T : @debug.Debug] Tree::to_repr(Self[T]) -> @debug.Repr
+
+// Type aliases
+
+// Traits
