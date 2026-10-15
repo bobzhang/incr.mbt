@@ -62,25 +62,3 @@ pub fn[T : Eq] List::eager(self : List[T]) -> List[T] {
     Art(art) => art.force().eager()
   }
 }
-
-///|
-/// Stable merge of two sorted lists. Names are preserved around their tails.
-pub fn[T : Compare + Eq] List::merge(
-  self : List[T],
-  other : List[T],
-) -> List[T] {
-  match (self, other) {
-    (Nil, _) => other
-    (_, Nil) => self
-    (Named(name, tail), _) => Named(name, tail.merge(other))
-    (_, Named(name, tail)) => Named(name, self.merge(tail))
-    (Art(art), _) => art.force().merge(other)
-    (_, Art(art)) => self.merge(art.force())
-    (Cons(a, atail), Cons(b, btail)) =>
-      if a <= b {
-        Cons(a, atail.merge(other))
-      } else {
-        Cons(b, self.merge(btail))
-      }
-  }
-}

@@ -11,6 +11,8 @@ pub fn[T : Eq] list_filter_lazy(@incr.Engine, (T) -> Bool) -> @incr.Memo[List[T]
 
 pub fn[A : Eq, B] list_map_lazy(@incr.Engine, (A) -> B) -> @incr.Memo[List[A], List[B]]
 
+pub fn[T : Eq + Compare] list_merge(@incr.Engine) -> @incr.Memo[(List[T], List[T]), List[T]]
+
 pub fn[T : Eq + Compare] mergesort_list_of_tree(@incr.Engine) -> @incr.Memo[Tree[T], List[T]]
 
 pub fn[T : Eq, R : Eq] monoid_of_tree(@incr.Engine, R, (T) -> R, (R, R) -> R) -> @incr.Memo[Tree[T], R]
@@ -51,7 +53,7 @@ pub fn[T] List::from_array(ArrayView[T]) -> Self[T]
 pub fn[T : Hash] List::hash(Self[T]) -> Int
 pub fn[T : Hash] List::hash_combine(Self[T], Hasher) -> Unit
 pub fn[T : Eq] List::is_empty(Self[T]) -> Bool
-pub fn[T : Compare + Eq] List::merge(Self[T], Self[T]) -> Self[T]
+pub fn[T : Eq + Compare] List::merge(Self[T], Self[T], engine~ : @incr.Engine) -> Self[T]
 pub fn[T : Eq] List::not_equal(Self[T], Self[T]) -> Bool
 pub fn[T : Eq] List::reverse(Self[T]) -> Self[T]
 pub fn[T : Eq] List::to_array(Self[T], limit? : Int) -> Array[T]

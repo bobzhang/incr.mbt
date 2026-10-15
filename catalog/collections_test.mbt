@@ -7,9 +7,12 @@ test "list conversion fold merge and basic operations" {
   assert_eq(xs.reverse().to_array(), [3, 2, 1])
   assert_eq(xs.fold(0, (x, r) => x - r), 2)
   assert_eq(xs.append(xs).to_array(), [1, 2, 3, 1, 2, 3])
-  assert_eq(xs.merge(@catalog.List::from_array([2, 4])).to_array(), [
-    1, 2, 2, 3, 4,
-  ])
+  assert_eq(
+    xs
+    .merge(@catalog.List::from_array([2, 4]), engine=@incr.Engine::new())
+    .to_array(),
+    [1, 2, 2, 3, 4],
+  )
   assert_true((Nil : @catalog.List[Int32]).is_empty())
 }
 

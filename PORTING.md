@@ -26,7 +26,7 @@ The port retains the reference's MPL-2.0 license.
 | Reflection | `Stats` and detached `NodeInfo` snapshots |
 | Named lists | Persistent `List`, lazy map/filter, demand, conversion, fold, reverse, append, merge |
 | Trees | Persistent `Tree`, balanced array construction, ordered conversion, memoized bottom-up fold |
-| Aggregation and sorting | `monoid_of_tree`, `mergesort_list_of_tree` |
+| Aggregation and sorting | `monoid_of_tree`, lazy `list_merge`, demand-driven `mergesort_list_of_tree` |
 | Trie sets | Persistent `Trie`, add, membership, fold, named incremental fold, list conversion |
 | Bit strings | Width-preserving values, prepend, flip, bit testing, masked shift |
 

@@ -59,9 +59,20 @@ pub fn[T : Eq, R : Eq] monoid_of_tree(
 }
 
 ///|
-/// Incremental merge sort: sorted results are reused at named tree boundaries.
+/// Demand-driven merge sort, with reusable sorted subtrees and suspended
+/// merge tails at named boundaries.
 pub fn[T : Eq + Compare] mergesort_list_of_tree(
   engine : @incr.Engine,
 ) -> @incr.Memo[Tree[T], List[T]] {
-  monoid_of_tree(engine, Nil, x => Cons(x, Nil), (l, r) => l.merge(r))
+  let merge = merge_table(engine)
+  tree_fold_up(
+    engine,
+    nil=() => Nil,
+    leaf=x => Cons(x, Nil),
+    bin=(_, l, r) => merge_lists(merge, None, l, None, r),
+    name=(name, _, l, r) => {
+      let (a, b) = @incr.name_fork(name)
+      merge_lists(merge, Some(a), l, Some(b), r)
+    },
+  )
 }

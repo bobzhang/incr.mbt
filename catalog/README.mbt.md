@@ -32,6 +32,11 @@ subtrees. Plain `Bin` nodes are traversed within the enclosing computation.
 `Tree::from_array` makes a balanced immutable tree; add names and cells at your
 application's edit boundaries.
 
+`list_merge(engine)` creates a reusable merge table for a pair of sorted lists.
+`left.merge(right, engine=engine)` performs a single merge. Both suspend tails
+at name boundaries; `mergesort_list_of_tree` uses the same lazy merge behavior,
+so asking for a prefix does not perform every remaining merge comparison.
+
 `list_map_lazy` and `list_filter_lazy` suspend at `List::Named` boundaries.
 `to_array(limit=n)` demands at most the first `n` elements, leaving later named
 tails unforced. `eager` explicitly demands the entire list. Basic `fold`, `reverse`,
