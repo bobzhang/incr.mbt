@@ -17,7 +17,7 @@ pub fn Engine::dispose(self : Engine) -> Unit {
     for node in self.nodes {
       node.deps.clear()
       node.deps.shrink_to_fit()
-      node.users.clear()
+      node.users = Map([])
     }
     self.nodes.clear()
     self.nodes.shrink_to_fit()

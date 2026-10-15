@@ -10,8 +10,8 @@ priv struct Entry[A, T] {
 pub struct Memo[A, T] {
   priv engine : Engine
   priv mut body : ((A) -> T)?
-  priv named : Map[(Array[Name], Name), Entry[A, T]]
-  priv structural : Map[(Array[Name], A), Art[T]]
+  priv mut named : Map[(Array[Name], Name), Entry[A, T]]
+  priv mut structural : Map[(Array[Name], A), Art[T]]
 }
 
 ///|
@@ -25,8 +25,8 @@ pub fn[A, T] Memo::new(engine : Engine, body : (A) -> T) -> Memo[A, T] {
   }
   engine.releases.push(() => {
     memo.body = None
-    memo.named.clear()
-    memo.structural.clear()
+    memo.named = Default::default()
+    memo.structural = Default::default()
   })
   memo
 }

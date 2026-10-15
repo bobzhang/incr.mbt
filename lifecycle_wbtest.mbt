@@ -19,3 +19,38 @@ test "disposal releases closures values edges and typed cache entries" {
   assert_eq(engine.releases.capacity(), 0)
   assert_eq(engine.nodes.capacity(), 0)
 }
+
+///|
+test "disposal releases map capacity while families and input handles survive" {
+  let e = Engine::new()
+  let memo = Memo::new(e, (x : Int32) => x)
+  let cells = Cells::new(e)
+  let input = e.cell(1)
+  let initial = (
+    memo.named.capacity(),
+    memo.structural.capacity(),
+    cells.named.capacity(),
+    cells.interned.capacity(),
+    input.node.users.capacity(),
+  )
+  for i in 0..<2048 {
+    ignore(memo.named(name_of_int(i), i))
+    ignore(memo.structural(i))
+    ignore(cells.cell(name_of_int(i), i))
+    ignore(cells.intern(i))
+    ignore(e.thunk(() => input.force()).force())
+  }
+  assert_true(memo.named.capacity() > initial.0)
+  assert_true(memo.structural.capacity() > initial.1)
+  assert_true(cells.named.capacity() > initial.2)
+  assert_true(cells.interned.capacity() > initial.3)
+  assert_true(input.node.users.capacity() > initial.4)
+  e.dispose()
+  e.dispose()
+  assert_eq(memo.named.capacity(), initial.0)
+  assert_eq(memo.structural.capacity(), initial.1)
+  assert_eq(cells.named.capacity(), initial.2)
+  assert_eq(cells.interned.capacity(), initial.3)
+  assert_eq(input.node.users.capacity(), initial.4)
+  assert_eq(e.stats().allocated, 0)
+}

@@ -24,3 +24,8 @@ test "repeated disposal and bounded depth" {
   ignore(@stress.lifecycle(771U, 30))
   ignore(@stress.depth(1U, 128))
 }
+
+///|
+test "disposed families and observers remain reachable" {
+  ignore(@stress.retained(1U, 3))
+}

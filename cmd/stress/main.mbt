@@ -10,6 +10,7 @@ fn main {
     "nominal" => try! @checks.nominal(seed, steps)
     "collections" => try! @checks.collections(seed, steps)
     "lifecycle" => try! @checks.lifecycle(seed, steps)
+    "retained" => try! @checks.retained(seed, steps)
     "depth" => try! @checks.depth(seed, steps)
     "growing" => try! @checks.growing(seed, steps)
     _ => abort("unknown mode")

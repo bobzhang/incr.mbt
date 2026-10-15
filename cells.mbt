@@ -3,8 +3,8 @@
 /// Keep this object alive and reuse it across edits.
 pub struct Cells[T] {
   priv engine : Engine
-  priv named : Map[(Array[Name], Name), Art[T]]
-  priv interned : Map[(Array[Name], T), Art[T]]
+  priv mut named : Map[(Array[Name], Name), Art[T]]
+  priv mut interned : Map[(Array[Name], T), Art[T]]
 }
 
 ///|
@@ -16,8 +16,8 @@ pub fn[T] Cells::new(engine : Engine) -> Cells[T] {
     interned: Default::default(),
   }
   engine.releases.push(() => {
-    cells.named.clear()
-    cells.interned.clear()
+    cells.named = Default::default()
+    cells.interned = Default::default()
   })
   cells
 }

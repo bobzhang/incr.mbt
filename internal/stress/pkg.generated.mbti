@@ -14,6 +14,8 @@ pub fn lifecycle(UInt, Int) -> Int64 raise
 
 pub fn nominal(UInt, Int) -> Int64 raise
 
+pub fn retained(UInt, Int) -> Int64 raise
+
 // Errors
 
 // Types and methods

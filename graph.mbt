@@ -28,7 +28,7 @@ priv struct Node {
   mut evaluating : Bool
   mut running : Bool
   deps : Array[Edge]
-  users : Map[Int64, Edge]
+  mut users : Map[Int64, Edge]
 }
 
 ///|

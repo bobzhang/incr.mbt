@@ -64,11 +64,12 @@ def cases(profile):
     if profile == "smoke":
         return [(m, s, 100 if m == "collections" else 1000)
                 for s in SEEDS[:2] for m in ("engine", "nominal", "collections")] + [
-                    ("lifecycle", 771, 30), ("depth", 1, 128), ("growing", 1, 1000)]
+                    ("lifecycle", 771, 30), ("retained", 1, 3), ("depth", 1, 128), ("growing", 1, 1000)]
     return ([("engine", s, 100000) for s in SEEDS]
             + [("nominal", s, 50000) for s in SEEDS]
             + [("collections", s, 10000) for s in SEEDS[:8]]
             + [("lifecycle", 771, n) for n in (100, 1000, 20000)]
+            + [("retained", 1, n) for n in (10, 100, 1000)]
             + [("growing", 1, n) for n in (1000, 10000, 100000)]
             + [("depth", 1, n) for n in (512, 2048, 8192)])
 

@@ -45,6 +45,12 @@ mark, not live graph size or a proof of no leaks.
 - `lifecycle`: repeatedly constructs and disposes both DAG and nominal-table
   graphs, including closures and reference cycles. The full profile uses 100,
   1,000, and 20,000 complete rounds. Each round runs 16 edits in each kernel.
+- `retained`: creates all four typed cache tables and a high-fanout input,
+  disposes the engine, and keeps the engine, memo, cell family, and input handles
+  reachable across 10, 100, and 1,000 rounds (2,048 entries per table per round).
+  This exposes retained backing buffers that a drop-everything lifecycle test
+  misses. Empty handles themselves still consume memory. A white-box regression
+  also requires all five map capacities to return to their initial size.
 - `growing`: deliberately creates 1,000, 10,000, and 100,000 distinct named cache
   entries. It checks exactly one allocation per new key, reuse of old keys, and
   empty graph snapshots after disposal. This documents retention for growing
