@@ -34,7 +34,7 @@ mark, not live graph size or a proof of no leaks.
   exercise allocation restoration. A second structural table uses deliberately
   colliding hashes. A 100-node bound checks reuse of the finite key spaces.
 - `collections`: sequences hold up to 64 elements using a reusable pool of 96
-  identities. Insertions, deletions, replacement, moves, reversal, equal writes,
+  identities, including names and their fork descendants. Insertions, deletions, replacement, moves, reversal, equal writes,
   and occasional resets change three named/articulated layouts. Consumers include
   map/filter composition, list-to-tree conversion, reversed round trips, lazy
   sort prefixes/full output, order-sensitive folds, and collision-bucket trie

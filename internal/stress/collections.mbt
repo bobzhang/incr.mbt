@@ -44,7 +44,15 @@ fn collection_input(
   let mut tail : @catalog.List[Int32] = Nil
   for i = entries.length() - 1; i >= 0; i = i - 1 {
     let (id, value) = entries[i]
-    let name = @incr.name_of_int(id)
+    let base = @incr.name_of_int(id / 4)
+    let (left, right) = @incr.name_fork(base)
+    // Distinct names may still share fork ancestry. Exercise those domains.
+    let name = match id % 4 {
+      0 => base
+      1 => left
+      2 => right
+      _ => @incr.name_fork(left).0
+    }
     tail = match layout {
       0 => Named(name, Cons(value, tail))
       1 => Named(name, Art(cells.cell(name, Cons(value, tail))))

@@ -71,7 +71,11 @@ pub fn[T : Eq + Compare] mergesort_list_of_tree(
     leaf=x => Cons(x, Nil),
     bin=(_, l, r) => merge_lists(merge, None, l, None, r),
     name=(name, _, l, r) => {
-      let (a, b) = @incr.name_fork(name)
+      // Wrap source identities before deriving merge names. The Pair root
+      // makes this domain disjoint from subsequent Left/Right derivations,
+      // even when one source name is itself a fork of another source name.
+      let source = @incr.name_pair(@incr.name_unit(), name)
+      let (a, b) = @incr.name_fork(source)
       merge_lists(merge, Some(a), l, Some(b), r)
     },
   )
