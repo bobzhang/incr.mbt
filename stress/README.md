@@ -34,7 +34,8 @@ mark, not live graph size or a proof of no leaks.
   exercise allocation restoration. A second structural table uses deliberately
   colliding hashes. A 100-node bound checks reuse of the finite key spaces.
 - `collections`: sequences hold up to 64 elements using a reusable pool of 96
-  identities, including names and their fork descendants. Insertions, deletions, replacement, moves, reversal, equal writes,
+  identities, including names and their fork descendants. Insertions, deletions,
+  replacement, moves, reversal, equal writes,
   and occasional resets change three named/articulated layouts. Consumers include
   map/filter composition, list-to-tree conversion, reversed round trips, lazy
   sort prefixes/full output, order-sensitive folds, and collision-bucket trie
@@ -62,13 +63,20 @@ mark, not live graph size or a proof of no leaks.
 
 The full profile first runs 16 seeds × 100,000 DAG rounds, 16 × 50,000 nominal
 rounds, and 8 × 10,000 collection rounds, followed by lifecycle, growth, and depth
-cases. `--soak-seconds 300` continues with deterministically generated new seeds
+cases. `--soak-seconds 300` continues with additional deterministic seeds
 until the complete process has run for at least five minutes; it is not a sleep.
-All rounds for each seed use one persistent engine, except the explicitly named
-lifecycle workload. The JSON records the exact extra cases because their count
+All rounds for each seed use one persistent engine, except the lifecycle and
+retained-handle workloads. The JSON records the exact extra cases because their count
 is machine-dependent. This is finite seeded testing, not exhaustive verification.
 
 CI runs the ordinary tests across backends and a native stress smoke job. The
 manual **Extended stress** workflow runs the full five-minute suite on Linux and
 macOS and uploads reports even when a test fails. It has no schedule or timing
 performance threshold.
+
+Seed `0` intentionally maps to `0x9e3779b9` because xorshift32 cannot start at
+zero. Both are replayable, but they generate the same stream: the 16 base seed
+values represent 15 distinct streams. Extra soak seeds may also repeat a base
+stream; round totals are not counts of unique executions.
+
+See [recorded results](RESULTS.md) and the [independent readiness review](PRODUCTION_REVIEW.md).

@@ -158,6 +158,10 @@ array oracles, reusable-name collection edits, lifecycle tests, and isolated
 growth/depth probes. Run `python3 stress/run.py --profile full --soak-seconds 300`
 for a sustained native run with replay commands and memory measurements. The
 manual **Extended stress** GitHub workflow runs it on Linux and macOS.
+See the [recorded stress results](stress/RESULTS.md) and
+[independent production-readiness review](stress/PRODUCTION_REVIEW.md).
+The reviewed deployment scope is bounded, synchronous workloads following the
+computation contract above; cache growth and stack depth still need application-specific limits.
 
 ## Benchmarks
 
