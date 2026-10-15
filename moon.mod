@@ -2,6 +2,8 @@ name = "dii/incr"
 
 version = "0.1.0"
 
+repository = "https://github.com/bobzhang/incr.mbt"
+
 readme = "README.mbt.md"
 
 license = "MPL-2.0"

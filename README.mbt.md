@@ -146,5 +146,7 @@ moon info
 
 README examples are executable tests. Generated `pkg.generated.mbti` files record
 the public API. The source reference under `.repos/` is not needed to build.
+GitHub Actions runs formatting, interface checks, all-backend type checking,
+and Wasm GC, JavaScript, and native tests on Linux and macOS.
 
 License: MPL-2.0, following the Adapton reference. See [LICENSE](LICENSE).

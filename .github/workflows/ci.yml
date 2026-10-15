@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: moon version --all
+      - name: Type check all backends
+        run: moon check --target all --warn-list +unnecessary_annotation --deny-warn
+      - name: Check formatting
+        run: moon fmt --check
+      - name: Verify public interfaces
+        run: |
+          moon info
+          git diff --exit-code
+      - name: Test WebAssembly GC
+        run: moon test --target wasm-gc
+      - name: Test JavaScript
+        run: moon test --target js
+      - name: Test native
+        run: moon test --target native
+      - name: Run example
+        run: moon run cmd/demo
