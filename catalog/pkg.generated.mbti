@@ -17,9 +17,26 @@ pub fn[T : Eq, R : Eq] monoid_of_tree(@incr.Engine, R, (T) -> R, (R, R) -> R) ->
 
 pub fn[T : Eq, R : Eq] tree_fold_up(@incr.Engine, nil~ : () -> R, leaf~ : (T) -> R, bin~ : (Int, R, R) -> R, name~ : (@incr.Name, Int, R, R) -> R) -> @incr.Memo[Tree[T], R]
 
+pub fn[T : Eq, R : Eq] trie_fold(@incr.Engine, (T, R) -> R) -> @incr.Memo[(Trie[T], R), R]
+
 // Errors
 
 // Types and methods
+pub struct BitString {
+  length : Int
+  value : Int
+} derive(Eq, Hash, @debug.Debug)
+pub fn BitString::equal(Self, Self) -> Bool
+pub fn BitString::flip(Self, Int) -> Self
+pub fn BitString::hash(Self) -> Int
+pub fn BitString::hash_combine(Self, Hasher) -> Unit
+pub fn BitString::is_set(Self, Int) -> Bool
+pub fn BitString::new(Int, Int) -> Self
+pub fn BitString::not_equal(Self, Self) -> Bool
+pub fn BitString::prepend(Self, Int) -> Self
+pub fn BitString::shift_left(Self, Int) -> Self
+pub fn BitString::to_repr(Self) -> @debug.Repr
+
 pub(all) enum List[T] {
   Nil
   Cons(T, List[T])
@@ -56,6 +73,24 @@ pub fn[T : Eq] Tree::not_equal(Self[T], Self[T]) -> Bool
 pub fn[T : Eq] Tree::to_array(Self[T], reverse? : Bool) -> Array[T]
 pub fn[T : Eq] Tree::to_list(Self[T]) -> List[T]
 pub fn[T : @debug.Debug] Tree::to_repr(Self[T]) -> @debug.Repr
+
+pub struct Trie[T] {
+  // private fields
+}
+pub fn[T : Hash + Eq] Trie::add(Self[T], T) -> Self[T]
+pub fn[T] Trie::art(@incr.Art[Self[T]]) -> Self[T]
+pub fn[T : Hash + Eq] Trie::contains(Self[T], T) -> Bool
+pub fn[T] Trie::empty() -> Self[T]
+pub fn[T : Eq] Trie::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq, R] Trie::fold(Self[T], R, (T, R) -> R) -> R
+pub fn[T : Hash + Eq] Trie::from_list(List[T]) -> Self[T]
+pub fn[T] Trie::hash(Self[T]) -> Int
+pub fn[T] Trie::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Eq] Trie::is_empty(Self[T]) -> Bool
+pub fn[T] Trie::named(@incr.Name, Self[T]) -> Self[T]
+pub fn[T : Eq] Trie::not_equal(Self[T], Self[T]) -> Bool
+pub impl[T : Eq] Eq for Trie[T]
+pub impl[T] Hash for Trie[T]
 
 // Type aliases
 
