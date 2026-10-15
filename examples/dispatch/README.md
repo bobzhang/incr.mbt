@@ -25,6 +25,15 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory _build/dispatch
 
 Open `http://127.0.0.1:8765`, then press **Play the 5-step story**.
 
+## Compact presentation
+
+`python3 examples/dispatch/build_inline.py` also produces
+`_build/dispatch/inline.html`, a theme-aware conversation fragment with Previous
+and Next controls for the same six scenes. It embeds the compiled engine directly,
+uses no external module requests, and restores the chosen scene when the host
+supplies saved widget state. The full dashboard above is the portable file to
+send to friends.
+
 ## What to demonstrate
 
 Starting from Reset, the guided story produces these actual engine counts:

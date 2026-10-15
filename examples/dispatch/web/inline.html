@@ -1,0 +1,84 @@
+<style>
+#dispatch-story { display:grid; gap:16px; color:var(--foreground); }
+#dispatch-story .district { display:grid; gap:8px; }
+#dispatch-story .district-label { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+#dispatch-story .work-bar { display:flex; height:24px; background:var(--muted); overflow:hidden; }
+#dispatch-story .rerun-part { background:var(--viz-series-1); }
+#dispatch-story .cached-part { background:var(--viz-series-2); }
+#dispatch-story .legend-mark { display:inline-block; width:12px; height:12px; margin-right:5px; }
+#dispatch-story .story-title { padding-right:90px; }
+</style>
+<div id="dispatch-story">
+  <div class="story-title"><h2>600 deliveries. Only changed work reruns.</h2><span class="text-small text-muted">Dispatch Lab · real MoonBit engine</span></div>
+  <div class="viz-row"><button class="btn" data-nav="back" type="button">Previous</button><button class="btn btn-primary" data-nav="next" type="button">Close the bridge →</button><span data-field="position" class="text-small">Scene 1 / 6</span></div>
+  <div class="viz-grid" aria-live="polite">
+    <div class="card viz-stat"><span>Calculations rerun / full evaluation</span><div class="viz-stat-value tabular-nums" data-field="counts">604 / 604</div></div>
+    <div class="card viz-stat"><span>Quote calculation reuse</span><div class="viz-stat-value tabular-nums" data-field="reuse">0%</div></div>
+  </div>
+  <div data-field="districts"></div>
+  <div class="viz-row text-small"><span><i class="legend-mark rerun-part"></i>Recalculated</span><span><i class="legend-mark cached-part"></i>Cached</span><span><i class="legend-mark" style="background:var(--muted)"></i>Not demanded</span></div>
+  <div aria-live="polite"><strong data-field="title">First demand</strong><div data-field="detail" class="text-small">600 quotes + 3 routes + 1 summary.</div></div>
+  <div class="viz-row text-small"><span data-field="verification">Checking results…</span><span data-field="total" class="tabular-nums"></span></div>
+  <span class="text-small text-muted">Synthetic dispatch data · computation counts, not a timing benchmark</span>
+  <div data-field="error" role="alert" hidden></div>
+</div>
+<script>
+(() => {
+/* COMPILED_ENGINE */
+const root = document.getElementById('dispatch-story');
+const field = name => root.querySelector(`[data-field="${name}"]`);
+const back = root.querySelector('[data-nav="back"]');
+const next = root.querySelector('[data-nav="next"]');
+const scenes = [
+  {title:'First demand',detail:'600 quotes + 3 routes + 1 summary.',next:'Close the bridge →'},
+  {args:[2,0,1],title:'East bridge closes',detail:'Only East changes: 200 quotes + its route + the summary.',next:'Rename a depot →'},
+  {args:[4,1,1],title:'Central Hub gets a new name',detail:'Routes observe availability; a label change needs no new quotes.',next:'Show West only →'},
+  {args:[5,0,0],title:'Only West is demanded',detail:'Its 200 quotes are already cached. Only the summary reruns.',next:'Change hidden traffic →'},
+  {args:[0,2,25],title:'Traffic gets worse in hidden East',detail:'West does zero extra work. East waits until someone asks for it.',next:'Open East →'},
+  {args:[5,0,2],title:'East catches up on demand',detail:'Deferred work uses the latest inputs, matching a fresh evaluation.',next:'Replay →'}
+];
+let scene = 0;
+function render(report) {
+  if (!report.verified || Number(report.evaluations) !== report.evaluated.length) throw Error('Independent verification failed');
+  const ran = new Set(report.evaluated);
+  field('counts').textContent = `${report.evaluations} / ${report.baseline_evaluations}`;
+  const quotesRun = report.evaluated.filter(x => x.startsWith('quote:')).length;
+  field('reuse').textContent = `${Math.round(100*(1-quotesRun/report.quotes.length))}%`;
+  field('position').textContent = `Scene ${scene+1} / ${scenes.length}`;
+  field('title').textContent = scenes[scene].title;
+  field('detail').textContent = scenes[scene].detail;
+  field('total').textContent = `Delivery quotes: $${(report.total_cents/100).toFixed(2)}`;
+  field('verification').textContent = `✓ All ${report.quotes.length} demanded quotes match full recomputation`;
+  field('districts').innerHTML = ['West','Central','East'].map((name,z) => {
+    const visible = report.inputs.region < 0 || report.inputs.region === z;
+    const count = Array.from({length:200},(_,i)=>i*3+z).filter(id=>ran.has(`quote:${id}`)).length;
+    const label = visible ? `${count} rerun · ${200-count} cached` : '200 not demanded';
+    return `<div class="district" style="margin-bottom:16px"><div class="district-label"><span>${name}</span><span class="text-small">${label}</span></div><div class="work-bar" role="img" aria-label="${name}: ${label}"><span class="rerun-part" style="width:${visible?count/2:0}%"></span><span class="cached-part" style="width:${visible?100-count/2:0}%"></span></div></div>`;
+  }).join('');
+  back.disabled = scene === 0;
+  next.textContent = scenes[scene].next;
+}
+function restore(index) {
+  scene = Number.isInteger(index) && index >= 0 && index < scenes.length ? index : 0;
+  let report = JSON.parse(reset());
+  for(let i=1;i<=scene;i++) report=JSON.parse(update(...scenes[i].args));
+  render(report);
+}
+function fail(error) { field('error').hidden=false;field('error').textContent=error.message; }
+function move(direction) {
+  try {
+    if(direction==='back') restore(scene-1);
+    else if(scene===scenes.length-1) restore(0);
+    else { scene++;render(JSON.parse(update(...scenes[scene].args))); }
+    if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{scene,title:scenes[scene].title},privateContent:null}).catch(()=>{});
+  } catch(error) { fail(error); }
+}
+back.addEventListener('click',()=>move('back'));
+next.addEventListener('click',()=>move('next'));
+window.addEventListener('openai:set_globals',event=> {
+  const state=event.detail?.globals?.widgetState;
+  if(state) try { restore(state.modelContent?.scene); } catch(error) { fail(error); }
+});
+try { restore(window.openai?.widgetState?.modelContent?.scene); } catch(error) { fail(error); }
+})();
+</script>

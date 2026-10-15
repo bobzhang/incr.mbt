@@ -48,7 +48,7 @@ jobs:
         run: moon test --target native
       - name: Build and verify interactive dispatch example
         run: |
-          python3 examples/dispatch/build.py
+          python3 examples/dispatch/build_inline.py
           node examples/dispatch/check.mjs
       - name: Run example
         run: moon run cmd/demo
