@@ -31,6 +31,8 @@ priv struct Edge {
 /// An independent, synchronous incremental computation graph.
 /// Use one engine for all articulations in a computation.
 pub struct Engine {
+  priv mut disposed : Bool
+  priv releases : Array[() -> Unit]
   priv naive : Bool
   priv id : Int32
   priv current : Ref[Node?]
@@ -56,6 +58,8 @@ pub fn Engine::new(naive~ : Bool = false) -> Engine {
   {
     id,
     naive,
+    disposed: false,
+    releases: [],
     current: Ref(None),
     path: Ref([]),
     nodes: [],
@@ -69,6 +73,7 @@ pub fn Engine::new(naive~ : Bool = false) -> Engine {
 
 ///|
 fn Engine::check_context(self : Engine) -> Unit {
+  guard !self.disposed else { engine_abort("engine has been disposed") }
   if executing_engine.val is Some(id) {
     guard id == self.id else {
       engine_abort("cannot mix incremental engines in a computation")
@@ -115,6 +120,7 @@ fn Node::detach(self : Node) -> Unit {
     edge.target.users.remove(edge.id)
   }
   self.deps.clear()
+  self.deps.shrink_to_fit()
 }
 
 ///|

@@ -9,7 +9,17 @@ pub struct Cells[T] {
 
 ///|
 pub fn[T] Cells::new(engine : Engine) -> Cells[T] {
-  { engine, named: Default::default(), interned: Default::default(), }
+  engine.check_context()
+  let cells = {
+    engine,
+    named: Default::default(),
+    interned: Default::default(),
+  }
+  engine.releases.push(() => {
+    cells.named.clear()
+    cells.interned.clear()
+  })
+  cells
 }
 
 ///|

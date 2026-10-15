@@ -1,0 +1,21 @@
+///|
+test "disposal releases closures values edges and typed cache entries" {
+  let engine = Engine::new()
+  let cells = Cells::new(engine)
+  let input = cells.cell(name_unit(), 42)
+  let memo = Memo::new(engine, (x : Int32) => input.force() + x)
+  let output = memo.named(name_unit(), 1)
+  assert_eq(output.force(), 43)
+  assert_true(output.node.deps.length() > 0)
+  engine.dispose()
+  assert_true(input.value is None)
+  assert_true(output.value is None)
+  assert_true(output.compute is None)
+  assert_true(memo.body is None)
+  assert_eq(memo.named.length(), 0)
+  assert_eq(cells.named.length(), 0)
+  assert_eq(output.node.deps.capacity(), 0)
+  assert_eq(input.node.users.length(), 0)
+  assert_eq(engine.releases.capacity(), 0)
+  assert_eq(engine.nodes.capacity(), 0)
+}

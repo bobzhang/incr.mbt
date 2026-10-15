@@ -9,14 +9,26 @@ priv struct Entry[A, T] {
 /// Captured non-incremental state must stay fixed for the lifetime of the table.
 pub struct Memo[A, T] {
   priv engine : Engine
-  priv body : (A) -> T
+  priv mut body : ((A) -> T)?
   priv named : Map[(Array[Name], Name), Entry[A, T]]
   priv structural : Map[(Array[Name], A), Art[T]]
 }
 
 ///|
 pub fn[A, T] Memo::new(engine : Engine, body : (A) -> T) -> Memo[A, T] {
-  { engine, body, named: Default::default(), structural: Default::default(), }
+  engine.check_context()
+  let memo = {
+    engine,
+    body: Some(body),
+    named: Default::default(),
+    structural: Default::default(),
+  }
+  engine.releases.push(() => {
+    memo.body = None
+    memo.named.clear()
+    memo.structural.clear()
+  })
+  memo
 }
 
 ///|
@@ -57,7 +69,7 @@ pub fn[A : Eq, T] Memo::named(
     }
     None => {
       let argument = Ref(arg)
-      let art = e.thunk(() => (self.body)(argument.val))
+      let art = e.thunk(() => self.body.unwrap()(argument.val))
       let entry = { arg: argument, art, }
       self.named[key] = entry
       entry
@@ -77,7 +89,7 @@ pub fn[A : Hash + Eq, T] Memo::structural(self : Memo[A, T], arg : A) -> Art[T] 
   match self.structural.get(key) {
     Some(art) => art
     None => {
-      let art = e.thunk(() => (self.body)(arg))
+      let art = e.thunk(() => self.body.unwrap()(arg))
       self.structural[key] = art
       art
     }

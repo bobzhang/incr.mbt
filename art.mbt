@@ -5,7 +5,7 @@ pub struct Art[T] {
   priv engine : Engine
   priv node : Node
   priv mut value : T?
-  priv compute : (() -> T)?
+  priv mut compute : (() -> T)?
 }
 
 ///|
@@ -34,32 +34,43 @@ pub extend Art with Hash::{hash, hash_combine}
 pub extend Art with Debug::{to_repr}
 
 ///|
+fn[T] Engine::art(
+  self : Engine,
+  kind : Kind,
+  value : T?,
+  compute : (() -> T)?,
+) -> Art[T] {
+  let art = { engine: self, node: self.node(kind), value, compute, }
+  self.releases.push(() => {
+    art.value = None
+    art.compute = None
+  })
+  art
+}
+
+///|
 /// Create a fresh mutable input. Equal writes do not invalidate observers.
 pub fn[T] Engine::cell(self : Engine, value : T) -> Art[T] {
-  { engine: self, node: self.node(Cell), value: Some(value), compute: None, }
+  self.art(Cell, Some(value), None)
 }
 
 ///|
 /// Create an immutable articulation.
 pub fn[T] Engine::put(self : Engine, value : T) -> Art[T] {
-  {
-    engine: self,
-    node: self.node(Constant),
-    value: Some(value),
-    compute: None,
-  }
+  self.art(Constant, Some(value), None)
 }
 
 ///|
 /// Suspend a computation. Its dependencies are discovered by `force` calls.
 /// Bodies must be deterministic and may read cells but may not call `set`.
 pub fn[T] Engine::thunk(self : Engine, compute : () -> T) -> Art[T] {
-  { engine: self, node: self.node(Thunk), value: None, compute: Some(compute), }
+  self.art(Thunk, None, Some(compute))
 }
 
 ///|
 /// Update an input between computations. Panics for immutable values or thunks.
 pub fn[T : Eq] Art::set(self : Art[T], value : T) -> Unit {
+  self.engine.check_context()
   guard executing_engine.val is None else {
     engine_abort("set is only allowed outside computations")
   }
