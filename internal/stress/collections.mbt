@@ -66,7 +66,7 @@ fn collection_input(
 /// Random mixed collection edits, bounded reusable identities and demand order.
 pub fn collections(seed : UInt32, steps : Int32) -> Int64 raise {
   let rng = Random::new(seed)
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let input = e.cell(@catalog.List::Nil)
   let map = @catalog.list_map_lazy(e, (x : Int32) => x * 3 + 1)

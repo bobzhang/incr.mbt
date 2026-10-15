@@ -24,7 +24,7 @@ fn list_workload(
   edits : Int32,
   verify : Bool,
 ) -> Int64 {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let values = Array::makei(n, initial_value)
   let chunks = n / 16
   let cells : Array[@incr.Art[@catalog.List[Int32]]] = Array::makei(chunks, _ => {

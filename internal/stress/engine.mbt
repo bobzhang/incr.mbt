@@ -56,7 +56,7 @@ fn interpret(
 /// Replay random input edits, rule changes, delayed demands and demand orders.
 pub fn engine(seed : UInt32, steps : Int32) -> Int64 raise {
   let rng = Random::new(seed)
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let inputs = Array::makei(16, _ => (rng.pick(201) - 100, rng.pick(21) - 10))
   let cells = inputs.map(x => e.cell(x))
   let rules = Array::makei(48, i => random_rule(rng, i))

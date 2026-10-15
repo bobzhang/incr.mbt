@@ -19,7 +19,7 @@ test "trie permutations preserve membership and ordinary-hash equality" {
 
 ///|
 test "lazy map and filter compose across repeated edits" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let input = e.cell(@catalog.List::from_array([1, 2, 3]))
   let list : @catalog.List[Int32] = Named(@incr.name_of_int(5), Art(input))
   let map = @catalog.list_map_lazy(e, x => x * 3)
@@ -36,7 +36,7 @@ test "lazy map and filter compose across repeated edits" {
 
 ///|
 test "sort and lazy map compose across repeated edits" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let left = e.cell(@catalog.Tree::from_array([4, 1]))
   let right = e.cell(@catalog.Tree::from_array([3, 2]))
   let tree : @catalog.Tree[Int32] = Named(

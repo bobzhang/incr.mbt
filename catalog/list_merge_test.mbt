@@ -1,6 +1,6 @@
 ///|
 test "named merge does not force an undemanded tail" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tail : @incr.Art[@catalog.List[Int32]] = e.thunk(() => {
     abort("undemanded merge tail")
   })
@@ -16,7 +16,7 @@ test "named merge does not force an undemanded tail" {
 
 ///|
 test "lazy merge tracks edited inputs after a partial demand" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tail = e.cell(@catalog.List::from_array([3, 5]))
   let left : @catalog.List[Int32] = Named(
     @incr.name_of_int(1),
@@ -38,7 +38,7 @@ test "lazy merge tracks edited inputs after a partial demand" {
 
 ///|
 test "tree merge sort suspends named merge tails" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tree : @catalog.Tree[Int32] = Named(
     @incr.name_unit(),
     1,

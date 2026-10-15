@@ -1,6 +1,6 @@
 ///|
 test "upstream four-node cycle traversal" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let memo = @incr.Memo::recursive(e, (memo, n : Int32) => {
     let (a, b) = match n {
       0 => (1, 0)
@@ -18,7 +18,7 @@ test "upstream four-node cycle traversal" {
 
 ///|
 test "equal projection remains stable across other named writes" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let name = @incr.name_unit()
   let pair = cells.cell(name, (1, 2))
@@ -33,7 +33,7 @@ test "equal projection remains stable across other named writes" {
 
 ///|
 test "projected thunk output avoids parent rerun" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell((1, 2))
   let child = e.thunk(() => x.force())
   let parent = e.thunk(() => child.force_map(p => p.0))

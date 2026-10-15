@@ -13,7 +13,7 @@ pub fn lifecycle(seed : UInt32, rounds : Int32) -> Int64 raise {
 ///|
 /// Run separately when exploring backend-specific recursive demand limits.
 pub fn depth(seed : UInt32, depth : Int32) -> Int64 raise {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let input = e.cell(0)
   let mut root = input
   for _ in 0..<depth {
@@ -36,7 +36,7 @@ pub fn depth(seed : UInt32, depth : Int32) -> Int64 raise {
 /// Measure deliberate cache growth with unique names, then release the graph.
 pub fn growing(seed : UInt32, steps : Int32) -> Int64 raise {
   let rng = Random::new(seed)
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let memo = @incr.Memo::new(e, (x : Int32) => x * 2)
   let mut checksum = 0L
   for step in 0..<steps {
@@ -67,7 +67,7 @@ pub fn retained(seed : UInt32, rounds : Int32) -> Int64 raise {
   ] = []
   let mut checksum = 0L
   for round in 0..<rounds {
-    let e = @incr.Engine::new()
+    let e = @incr.Engine()
     let cells = @incr.Cells::new(e)
     let memo = @incr.Memo::new(e, (x : Int32) => x + round)
     let input = e.cell(round)

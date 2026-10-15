@@ -10,7 +10,7 @@ impl Hash for Collision with fn hash_combine(_self, hasher) {
 /// Replay scoped name conflicts and allocator restoration against direct values.
 pub fn nominal(seed : UInt32, steps : Int32) -> Int64 raise {
   let rng = Random::new(seed)
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let values = Array::makei(8, _ => rng.pick(101) - 50)
   let inputs = values.map(x => e.cell(x))
   // (scope, name, source, bias). Different producers intentionally share names.

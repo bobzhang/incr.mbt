@@ -26,7 +26,7 @@ fn tree_workload(
   edits : Int32,
   verify : Bool,
 ) -> Int64 {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let leaves = []
   let tree = make_tree(e, 0, n, 1, leaves)
   let demand : () -> Array[Int32] = if mode == "sum" {

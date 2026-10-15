@@ -72,7 +72,7 @@ let next_engine : Ref[Int64] = Ref(0)
 let executing_engine : Ref[Int64?] = Ref(None)
 
 ///|
-pub fn Engine::new(naive~ : Bool = false) -> Engine {
+pub fn Engine::Engine(naive~ : Bool = false) -> Engine {
   guard next_engine.val >= 0 && next_engine.val < COUNTER_MAX else {
     engine_abort("engine identity space exhausted")
   }

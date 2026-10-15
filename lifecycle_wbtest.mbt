@@ -1,6 +1,6 @@
 ///|
 test "disposal releases closures values edges and typed cache entries" {
-  let engine = Engine::new()
+  let engine = Engine()
   let cells = Cells::new(engine)
   let input = cells.cell(name_unit(), 42)
   let memo = Memo::new(engine, (x : Int32) => input.force() + x)
@@ -22,7 +22,7 @@ test "disposal releases closures values edges and typed cache entries" {
 
 ///|
 test "disposal releases map capacity while families and input handles survive" {
-  let e = Engine::new()
+  let e = Engine()
   let memo = Memo::new(e, (x : Int32) => x)
   let cells = Cells::new(e)
   let input = e.cell(1)

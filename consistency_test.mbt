@@ -1,7 +1,7 @@
 ///|
 test "incremental and naive engines agree with direct evaluation after edits" {
   for naive in [false, true] {
-    let e = @incr.Engine::new(naive~)
+    let e = @incr.Engine(naive~)
     let input = e.cell((0, 1))
     let choose = e.cell(true)
     let left = e.thunk(() => input.force_map(p => p.0) * 3)
@@ -24,7 +24,7 @@ test "incremental and naive engines agree with direct evaluation after edits" {
 
 ///|
 test "naive mode reruns demanded thunks" {
-  let e = @incr.Engine::new(naive=true)
+  let e = @incr.Engine(naive=true)
   let x = e.cell(3)
   let y = x.map(x => x * 2)
   assert_eq(y.force(), 6)
@@ -44,7 +44,7 @@ impl Hash for Collision with fn hash_combine(_self, hasher) {
 
 ///|
 test "structural memo handles hash collisions using equality" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let memo = @incr.Memo::new(e, (x : Collision) => x.0 * 2)
   let a = memo.structural(Collision(1))
   let b = memo.structural(Collision(2))
@@ -56,7 +56,7 @@ test "structural memo handles hash collisions using equality" {
 
 ///|
 test "graph snapshots detach obsolete dependencies" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let flag = e.cell(true)
   let a = e.cell(1)
   let b = e.cell(2)
@@ -73,7 +73,7 @@ test "graph snapshots detach obsolete dependencies" {
 
 ///|
 test "multiple projection observations are retained independently" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell((1, 2))
   let root = e.thunk(() => x.force_map(p => p.0) + x.force_map(p => p.1))
   assert_eq(root.force(), 3)
@@ -85,7 +85,7 @@ test "multiple projection observations are retained independently" {
 
 ///|
 test "namespaces restore after checked errors" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let name = @incr.name_unit()
   let original = cells.cell(name, 42)
@@ -97,7 +97,7 @@ test "namespaces restore after checked errors" {
 
 ///|
 test "generated named overwrite traces agree with a direct evaluation oracle" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let input = e.cell((0, 0, true, 0))
   let outputs = @incr.Cells::new(e)
   let child_name = @incr.name_of_string("child")

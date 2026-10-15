@@ -1,6 +1,6 @@
 ///|
 test "edge identities cross the 32-bit wrap boundary without losing observers" {
-  let e = Engine::new()
+  let e = Engine()
   let input = e.cell(1)
   let old = e.thunk(() => input.force())
   assert_eq(old.force(), 1)
@@ -21,8 +21,8 @@ test "edge identities cross the 32-bit wrap boundary without losing observers" {
 ///|
 test "engine identities cross the signed 32-bit boundary" {
   next_engine.protect(2147483647L, () => {
-    let a = Engine::new()
-    let b = Engine::new()
+    let a = Engine()
+    let b = Engine()
     let first = a.cell(1)
     let second = b.cell(1)
     assert_true(first != second)
@@ -35,7 +35,7 @@ test "engine identities cross the signed 32-bit boundary" {
 
 ///|
 test "event counters stay nonnegative and saturate instead of wrapping" {
-  let e = Engine::new()
+  let e = Engine()
   let input = e.cell(1)
   let output = e.thunk(() => input.force())
   e.evaluations = 2147483647L
@@ -57,7 +57,7 @@ test "event counters stay nonnegative and saturate instead of wrapping" {
 
 ///|
 test "panic exhausted dependency identity space fails before aliasing" {
-  let e = Engine::new()
+  let e = Engine()
   let input = e.cell(1)
   let output = e.thunk(() => input.force())
   e.next_edge = COUNTER_MAX
@@ -68,7 +68,7 @@ test "panic exhausted dependency identity space fails before aliasing" {
 test "high 64-bit edge identities do not alias" {
   for
     start in [2147483646L, 4294967294L, 9007199254740990L, 9223372036854775804L] {
-    let e = Engine::new()
+    let e = Engine()
     let x = e.cell(1)
     let old = e.thunk(() => x.force())
     assert_eq(old.force(), 1)
@@ -92,7 +92,7 @@ test "high 64-bit edge identities do not alias" {
 
 ///|
 test "event counters reach and remain at maximum" {
-  let e = Engine::new()
+  let e = Engine()
   let x = e.cell(1)
   let out = e.thunk(() => x.force())
   ignore(out.force())
@@ -121,8 +121,8 @@ test "event counters reach and remain at maximum" {
 test "engine IDs preserve low and high bits" {
   for start in [4294967295L, 9007199254740991L, COUNTER_MAX - 2L] {
     next_engine.protect(start, () => {
-      let a = Engine::new()
-      let b = Engine::new()
+      let a = Engine()
+      let b = Engine()
       let x = a.cell(1)
       let y = b.cell(1)
       assert_true(x != y)

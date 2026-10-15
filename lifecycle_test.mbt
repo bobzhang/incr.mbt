@@ -1,6 +1,6 @@
 ///|
 test "dispose clears graph and is idempotent" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell(1)
   let memo = @incr.Memo::recursive(e, (memo, n : Int32) => {
     if n == 0 {
@@ -19,7 +19,7 @@ test "dispose clears graph and is idempotent" {
 
 ///|
 test "panic force after disposal" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell(42)
   e.dispose()
   ignore(x.force())
@@ -27,7 +27,7 @@ test "panic force after disposal" {
 
 ///|
 test "panic memo allocation after disposal" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let memo = @incr.Memo::new(e, (x : Int32) => x)
   e.dispose()
   ignore(memo.structural(42))

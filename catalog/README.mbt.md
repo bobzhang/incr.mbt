@@ -9,7 +9,7 @@ value to edit a structure. Keep the mapper or fold table across successive edits
 ```mbt check
 ///|
 test "readme tree aggregation" {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let left = engine.cell(@catalog.Tree::from_array([1, 2]))
   let right = engine.cell(@catalog.Tree::from_array([3, 4]))
   let tree : @catalog.Tree[Int32] = Named(
@@ -54,7 +54,7 @@ and `append` materialize their input; they are not memoized transformations.
 ```mbt check
 ///|
 test "readme lazy list" {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let tail = engine.cell(@catalog.List::from_array([2, 3]))
   let input : @catalog.List[Int32] = Cons(
     1,

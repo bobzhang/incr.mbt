@@ -1,6 +1,6 @@
 ///|
 test "named cells retain identity and update observers" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let name = @incr.name_of_string("input")
   let a = cells.cell(name, 2)
@@ -14,7 +14,7 @@ test "named cells retain identity and update observers" {
 
 ///|
 test "named memo reuses equal arguments and replaces different arguments" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let calls = Ref(0)
   let memo = @incr.Memo::new(e, x => {
     calls.val += 1
@@ -34,7 +34,7 @@ test "named memo reuses equal arguments and replaces different arguments" {
 
 ///|
 test "recursive structural memoization" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let fib = @incr.Memo::recursive(e, (memo, n : Int32) => {
     if n < 2 {
       n
@@ -50,7 +50,7 @@ test "recursive structural memoization" {
 
 ///|
 test "namespace is restored and retained by suspended computations" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let local_name = @incr.name_of_string("local_name")
   let a = @incr.name_of_string("a")
@@ -66,7 +66,7 @@ test "namespace is restored and retained by suspended computations" {
 
 ///|
 test "cell allocation dependencies restore overwritten output" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let name = @incr.name_unit()
   let input = e.cell(1)
@@ -82,7 +82,7 @@ test "cell allocation dependencies restore overwritten output" {
 
 ///|
 test "thunk allocation dependencies restore overwritten arguments" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let memo = @incr.Memo::new(e, x => x * 2)
   let name = @incr.name_unit()
   let producer = e.thunk(() => memo.named(name, 5))
@@ -96,7 +96,7 @@ test "thunk allocation dependencies restore overwritten arguments" {
 
 ///|
 test "interned values and namespaces" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let a = cells.intern("hello")
   assert_true(a == cells.intern("hello"))
@@ -108,7 +108,7 @@ test "interned values and namespaces" {
 
 ///|
 test "panic conflicting name invalidates an active observer" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let name = @incr.name_unit()
   let input = cells.cell(name, 0)
@@ -122,7 +122,7 @@ test "panic conflicting name invalidates an active observer" {
 
 ///|
 test "cleaning may update a cell observed by its validating parent" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let input = e.cell(1)
   let producer = e.thunk(() => cells.cell(@incr.name_unit(), input.force() * 10))
@@ -134,7 +134,7 @@ test "cleaning may update a cell observed by its validating parent" {
 
 ///|
 test "review allocation-only edge must not observe result changes" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cells = @incr.Cells::new(e)
   let cell_name = @incr.name_of_string("input")
   let x = cells.cell(cell_name, 0)
@@ -151,7 +151,7 @@ test "review allocation-only edge must not observe result changes" {
 
 ///|
 test "result edits leave allocation-only parents clean but argument edits invalidate them" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let input = e.cell(1)
   let memo = @incr.Memo::new(e, (x : Int32) => x + input.force())
   let name = @incr.name_unit()

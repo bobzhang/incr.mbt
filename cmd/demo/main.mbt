@@ -1,6 +1,6 @@
 ///|
 fn main {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let numerator = engine.cell(42)
   let denominator = engine.cell(2)
   let quotient = engine.thunk(() => numerator.force() / denominator.force())

@@ -3,7 +3,7 @@ test "merge sort separates source names from internal forked names" {
   let m = @incr.name_of_int(1)
   let (left, right) = @incr.name_fork(m)
   for q in [left, right, @incr.name_fork(left).0] {
-    let e = @incr.Engine::new()
+    let e = @incr.Engine()
     let input = e.cell(@catalog.Tree::Nil)
     let sort = @catalog.mergesort_list_of_tree(e)
     let output = sort.named(@incr.name_of_string("sort-root"), Art(input))

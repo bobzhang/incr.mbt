@@ -1,6 +1,6 @@
 ///|
 test "sequence tree roundtrip preserves order for empty repeated and named lists" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let build = @catalog.tree_of_list(e)
   let reversed = @catalog.tree_of_list(e, reverse=true)
   let to_list = @catalog.list_of_tree(e)
@@ -30,7 +30,7 @@ test "sequence tree roundtrip preserves order for empty repeated and named lists
 
 ///|
 test "sequential fold orders leaf branch and name callbacks" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tree : @catalog.Tree[String] = Named(
     @incr.name_unit(),
     2,
@@ -63,7 +63,7 @@ test "sequential fold orders leaf branch and name callbacks" {
 
 ///|
 test "sequential fold reuses an unaffected prefix after insertion and deletion" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let left = e.cell(@catalog.Tree::from_array([1, 2]))
   let right = e.cell(@catalog.Tree::from_array([3, 4]))
   let tree : @catalog.Tree[Int32] = Named(
@@ -96,7 +96,7 @@ test "sequential fold reuses an unaffected prefix after insertion and deletion" 
 
 ///|
 test "named sequence edits flow through construction aggregation sorting and roundtrip" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let chunk = e.cell(@catalog.List::from_array([1, 2]))
   let tail : @catalog.List[Int32] = Named(
     @incr.name_of_string("tail"),
@@ -147,7 +147,7 @@ impl Hash for Counted with fn hash_combine(self, hasher) {
 
 ///|
 test "list-tree edits reuse hashing work in unchanged named suffixes" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let prefix_hashes = Ref(0)
   let suffix_hashes = Ref(0)
   let suffix : @catalog.List[Counted] = Named(

@@ -12,7 +12,7 @@ fn composition_next(state : Ref[UInt32]) -> Int32 {
 test "composed consumers and branching trie across mixed edits" {
   for seed in [20261016U, 195948557U, 305419896U] {
     let rng = Ref(seed)
-    let e = @incr.Engine::new()
+    let e = @incr.Engine()
     let cells = @incr.Cells::new(e)
     let input = e.cell(@catalog.List::Nil)
     let parameter = e.cell(0)

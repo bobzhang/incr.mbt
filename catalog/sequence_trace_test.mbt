@@ -46,7 +46,7 @@ fn sequence_events(list : @catalog.List[Int32]) -> Array[String] {
 test "generated sequence insert delete replace and move traces preserve all directions" {
   for layout in 0..<3 {
     for seed in [1, 31, 771] {
-      let e = @incr.Engine::new()
+      let e = @incr.Engine()
       let cells = @incr.Cells::new(e)
       let input = e.cell(@catalog.List::Nil)
       let builds = [
@@ -151,7 +151,7 @@ test "generated sequence insert delete replace and move traces preserve all dire
 
 ///|
 test "reverse sequential fold reuses unaffected traversal prefix" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let left = e.cell(@catalog.Tree::from_array([1, 2]))
   let right = e.cell(@catalog.Tree::from_array([3, 4]))
   let tree : @catalog.Tree[Int32] = Named(
@@ -186,7 +186,7 @@ test "reverse sequential fold reuses unaffected traversal prefix" {
 ///|
 test "inverse conversion reuses unaffected named tail identity" {
   for reverse in [false, true] {
-    let e = @incr.Engine::new()
+    let e = @incr.Engine()
     let left = e.cell(@catalog.Tree::from_array([1, 2]))
     let right = e.cell(@catalog.Tree::from_array([3, 4]))
     let tree : @catalog.Tree[Int32] = Named(

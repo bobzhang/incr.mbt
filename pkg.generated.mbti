@@ -50,9 +50,9 @@ pub fn[T] Cells::new(Engine) -> Self[T]
 pub struct Engine {
   // private fields
 }
+pub fn Engine::Engine(naive? : Bool) -> Self
 pub fn[T] Engine::cell(Self, T) -> Art[T]
 pub fn Engine::dispose(Self) -> Unit
-pub fn Engine::new(naive? : Bool) -> Self
 pub fn[T] Engine::ns(Self, Name, () -> T raise?) -> T raise?
 pub fn[T] Engine::put(Self, T) -> Art[T]
 pub fn Engine::snapshot(Self) -> Array[NodeInfo]

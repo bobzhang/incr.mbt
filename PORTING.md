@@ -21,7 +21,7 @@ The port retains the reference's MPL-2.0 license.
 | Projected observations | `Art::force_map`; cell projections prune dirtying |
 | Cycle cutting | `Art::force_cycle` with optional fallback |
 | Derived computations | `Art::map` creates a cached derived thunk |
-| Naive evaluation | `Engine::new(naive=true)` reruns demanded bodies |
+| Naive evaluation | `Engine(naive=true)` reruns demanded bodies |
 | Lifecycle | `Engine::dispose` releases graph edges, typed caches, and closures |
 | Reflection | `Stats` and detached `NodeInfo` snapshots |
 | Named lists | Persistent `List`, lazy map/filter, demand, conversion, fold, reverse, append, merge |

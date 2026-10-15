@@ -50,7 +50,7 @@ fn stable_merge_oracle(
 
 ///|
 test "lazy merge insertion deletion duplicates empty sides and stable ties" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let left = e.cell(@catalog.List::Nil)
   let right = e.cell(@catalog.List::Nil)
   let count = Ref(0)
@@ -87,7 +87,7 @@ test "lazy merge insertion deletion duplicates empty sides and stable ties" {
 
 ///|
 test "lazy merge reuses unchanged named suffix after prefix insertion deletion" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let comparisons = Ref(0)
   let xs = [ for i in 0..<12 => { key: 100 + i * 2, id: i, comparisons, } ]
   let ys = [

@@ -40,7 +40,7 @@ test "trie collision buckets retain every distinct value" {
 
 ///|
 test "named trie fold tracks successive edits" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let cell = e.cell(@catalog.Trie::empty())
   let tree = @catalog.Trie::named(
     @incr.name_of_string("set"),
@@ -75,7 +75,7 @@ test "bitstring width and upstream prepend shift cases" {
 test "collision bucket order is part of incremental equality" {
   let a = @catalog.Trie::empty().add(Key(1)).add(Key(2))
   let b = @catalog.Trie::empty().add(Key(2)).add(Key(1))
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let fold = @catalog.trie_fold(e, (x : Key, acc) => acc * 10 + x.0)
   assert_eq(fold.call((a, 0)), 12)
   assert_eq(fold.call((b, 0)), 21)

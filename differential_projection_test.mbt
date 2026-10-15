@@ -12,7 +12,7 @@ fn projection_next(state : Ref[UInt32]) -> Int32 {
 test "random projected thunk branches with delayed demands" {
   for seed in [20261016U, 195948557U, 305419896U, 270544960U] {
     let rng = Ref(seed)
-    let e = @incr.Engine::new()
+    let e = @incr.Engine()
     let inputs = Array::makei(8, _ => (0, 0))
     let controls = Array::makei(24, i => (0, i % (8 + i), (i + 1) % (8 + i)))
     let cells = inputs.map(x => e.cell(x))

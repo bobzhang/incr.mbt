@@ -8,9 +8,7 @@ test "list conversion fold merge and basic operations" {
   assert_eq(xs.fold(0, (x, r) => x - r), 2)
   assert_eq(xs.append(xs).to_array(), [1, 2, 3, 1, 2, 3])
   assert_eq(
-    xs
-    .merge(@catalog.List::from_array([2, 4]), engine=@incr.Engine::new())
-    .to_array(),
+    xs.merge(@catalog.List::from_array([2, 4]), engine=Engine()).to_array(),
     [1, 2, 2, 3, 4],
   )
   assert_true((Nil : @catalog.List[Int32]).is_empty())
@@ -18,7 +16,7 @@ test "list conversion fold merge and basic operations" {
 
 ///|
 test "lazy map only demands the named prefix and reuses unchanged tail" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tail = e.cell(@catalog.List::from_array([3, 4]))
   let input : @catalog.List[Int32] = Cons(
     1,
@@ -41,7 +39,7 @@ test "lazy map only demands the named prefix and reuses unchanged tail" {
 
 ///|
 test "lazy filter tracks cell edits" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let tail = e.cell(@catalog.List::from_array([1, 2, 3, 4]))
   let filter = @catalog.list_filter_lazy(e, x => x % 2 == 0)
   let input : @catalog.List[Int32] = Named(@incr.name_of_int(1), Art(tail))
@@ -68,7 +66,7 @@ test "tree conversions preserve order and names" {
 
 ///|
 test "tree aggregate and sort reuse the unaffected subtree" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let left = e.cell(@catalog.Tree::from_array([3, 1]))
   let right = e.cell(@catalog.Tree::from_array([4, 2]))
   let tree : @catalog.Tree[Int32] = Named(

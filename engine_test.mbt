@@ -1,6 +1,6 @@
 ///|
 test "cells constants and lazy caches" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let input = e.cell(21)
   let calls = Ref(0)
   let result = e.thunk(() => {
@@ -23,7 +23,7 @@ test "cells constants and lazy caches" {
 
 ///|
 test "upstream avoid divide by zero" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let num = e.cell(42)
   let den = e.cell(2)
   let div = e.thunk(() => num.force() / den.force())
@@ -43,7 +43,7 @@ test "upstream avoid divide by zero" {
 
 ///|
 test "upstream avoid expensive subcomputation and remove obsolete edges" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let flag = e.cell(true)
   let iterations = e.cell(3)
   let input = e.cell(42)
@@ -76,7 +76,7 @@ test "upstream avoid expensive subcomputation and remove obsolete edges" {
 
 ///|
 test "equal intermediate output cleans parent without rerunning" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell(2)
   let parity = x.map(x => x % 2)
   let root = parity.map(x => x == 0)
@@ -91,7 +91,7 @@ test "equal intermediate output cleans parent without rerunning" {
 
 ///|
 test "upstream force_map prunes dirty traversal" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let pair = e.cell((1234, 5678))
   let first = e.thunk(() => pair.force_map(p => p.0) + 100)
   assert_eq(first.force(), 1334)
@@ -106,7 +106,7 @@ test "upstream force_map prunes dirty traversal" {
 
 ///|
 test "diamond dependencies and repeated observations" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell(1)
   let a = x.map(x => x + 10)
   let b = x.map(x => x * 10)
@@ -119,7 +119,7 @@ test "diamond dependencies and repeated observations" {
 
 ///|
 test "cycle fallback" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let link : Ref[@incr.Art[Int32]?] = Ref(None)
   let value = e.cell(2)
   let cycle = e.thunk(() => {
@@ -133,7 +133,7 @@ test "cycle fallback" {
 
 ///|
 test "panic unexpected cycle" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let link : Ref[@incr.Art[Int32]?] = Ref(None)
   let cycle = e.thunk(() => link.val.unwrap().force())
   link.val = Some(cycle)
@@ -142,7 +142,7 @@ test "panic unexpected cycle" {
 
 ///|
 test "panic set during computation" {
-  let e = @incr.Engine::new()
+  let e = @incr.Engine()
   let x = e.cell(0)
   ignore(
     e
@@ -156,13 +156,13 @@ test "panic set during computation" {
 
 ///|
 test "panic cross engine dependency" {
-  let a = @incr.Engine::new()
-  let b = @incr.Engine::new()
+  let a = @incr.Engine()
+  let b = @incr.Engine()
   let input = a.cell(42)
   ignore(b.thunk(() => input.force()).force())
 }
 
 ///|
 test "panic immutable update" {
-  @incr.Engine::new().put(1).set(2)
+  @incr.Engine().put(1).set(2)
 }

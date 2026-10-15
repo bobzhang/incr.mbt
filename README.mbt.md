@@ -17,7 +17,7 @@ No explicit stabilization step is needed.
 ```mbt check
 ///|
 test "readme incremental total" {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let price = engine.cell(20)
   let quantity = engine.cell(3)
   let total = engine.thunk(() => price.force() * quantity.force())
@@ -46,7 +46,7 @@ The table identifies the program point, so retain it across edits.
 ```mbt check
 ///|
 test "readme memoization" {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let fib = @incr.Memo::recursive(engine, (memo, n : Int32) => {
     if n < 2 {
       n
@@ -85,7 +85,7 @@ rerunning the observer during dependency cleaning.
 ```mbt check
 ///|
 test "readme projection" {
-  let engine = @incr.Engine::new()
+  let engine = @incr.Engine()
   let record = engine.cell(("Ada", 20))
   let greeting = engine.thunk(() => "Hello, " + record.force_map(x => x.0))
   assert_eq(greeting.force(), "Hello, Ada")
@@ -105,7 +105,7 @@ and bit strings. See the [collection examples](catalog/README.mbt.md).
 cache hit, dirtying, and cleaning counts. Event counters use `Int64` and saturate
 at its maximum instead of wrapping; the node count remains `Int`.
 `engine.snapshot()` returns detached graph metadata with
-ordered dependency lists. `Engine::new(naive=true)` reruns each demanded thunk,
+ordered dependency lists. `Engine(naive=true)` reruns each demanded thunk,
 which is useful for checking incremental results against fresh evaluation.
 
 ## Computation contract
