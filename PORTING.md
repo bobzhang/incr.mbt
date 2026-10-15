@@ -25,7 +25,7 @@ The port retains the reference's MPL-2.0 license.
 | Lifecycle | `Engine::dispose` releases graph edges, typed caches, and closures |
 | Reflection | `Stats` and detached `NodeInfo` snapshots |
 | Named lists | Persistent `List`, lazy map/filter, demand, conversion, fold, reverse, append, merge |
-| Trees | Persistent `Tree`, balanced array construction, ordered conversion, memoized bottom-up fold |
+| Trees and sequences | Persistent `Tree`, balanced array construction, incremental hash-level `tree_of_list`, `list_of_tree`, and memoized bottom-up and sequential folds |
 | Aggregation and sorting | `monoid_of_tree`, lazy `list_merge`, demand-driven `mergesort_list_of_tree` |
 | Trie sets | Persistent `Trie`, add, membership, fold, named incremental fold, list conversion |
 | Bit strings | Width-preserving values, prepend, flip, bit testing, masked shift |
@@ -64,10 +64,10 @@ the abstract-domain `AbsMapFam` optimization, or the entire polymorphic collecti
 trait hierarchy. General projected observations are available through `force_map`.
 
 The experimental arithmetic parser and fixed-point stubs are not exported by the
-reference's `catalog/mod.rs` and are omitted. Advanced sequence operations such as
-hash-level treap construction, name-passing sequential folds, specialized pruning,
-and the multiple experimental merge-sort variants are also omitted. Balanced
-construction and the primary bottom-up fold/merge-sort behavior are available.
+reference's `catalog/mod.rs` and are omitted. The specialized name-passing
+bottom-up fold, tree pruning/filter variants, and multiple experimental merge-sort
+variants are also omitted. The main incremental list/tree conversion pipeline,
+sequential and bottom-up folds, and demand-driven merge sort are available.
 
 There is no asynchronous/concurrent evaluator, graph eviction, automatic cloning,
 or fixed-point solver. See the README computation contract.

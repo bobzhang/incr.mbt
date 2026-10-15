@@ -32,6 +32,15 @@ subtrees. Plain `Bin` nodes are traversed within the enclosing computation.
 `Tree::from_array` makes a balanced immutable tree; add names and cells at your
 application's edit boundaries.
 
+For editable sequences, `tree_of_list(engine)` converts a named list into a
+hash-level tree and reuses named regions after insertions and deletions.
+`tree_fold_seq(engine, leaf=..., bin=..., name=...)` visits leaves and branch
+boundaries in order, memoizing both subtrees and their incoming accumulators.
+Its argument is `(tree, initial_accumulator)`. `list_of_tree(engine)` performs
+the inverse conversion to a named articulated list. Each accepts `reverse=true`
+to reverse traversal order. Keep these tables across edits, just like the
+bottom-up folds.
+
 `list_merge(engine)` creates a reusable merge table for a pair of sorted lists.
 `left.merge(right, engine=engine)` performs a single merge. Both suspend tails
 at name boundaries; `mergesort_list_of_tree` uses the same lazy merge behavior,

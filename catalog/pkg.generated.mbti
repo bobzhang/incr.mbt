@@ -13,11 +13,17 @@ pub fn[A : Eq, B] list_map_lazy(@incr.Engine, (A) -> B) -> @incr.Memo[List[A], L
 
 pub fn[T : Eq + Compare] list_merge(@incr.Engine) -> @incr.Memo[(List[T], List[T]), List[T]]
 
+pub fn[T : Eq] list_of_tree(@incr.Engine, reverse? : Bool) -> @incr.Memo[Tree[T], List[T]]
+
 pub fn[T : Eq + Compare] mergesort_list_of_tree(@incr.Engine) -> @incr.Memo[Tree[T], List[T]]
 
 pub fn[T : Eq, R : Eq] monoid_of_tree(@incr.Engine, R, (T) -> R, (R, R) -> R) -> @incr.Memo[Tree[T], R]
 
+pub fn[T : Eq, R : Eq] tree_fold_seq(@incr.Engine, reverse? : Bool, leaf~ : (T, R) -> R, bin~ : (Int, R) -> R, name~ : (@incr.Name, Int, R) -> R) -> @incr.Memo[(Tree[T], R), R]
+
 pub fn[T : Eq, R : Eq] tree_fold_up(@incr.Engine, nil~ : () -> R, leaf~ : (T) -> R, bin~ : (Int, R, R) -> R, name~ : (@incr.Name, Int, R, R) -> R) -> @incr.Memo[Tree[T], R]
+
+pub fn[T : Hash + Eq] tree_of_list(@incr.Engine, reverse? : Bool) -> @incr.Memo[List[T], Tree[T]]
 
 pub fn[T : Eq, R : Eq] trie_fold(@incr.Engine, (T, R) -> R) -> @incr.Memo[(Trie[T], R), R]
 
