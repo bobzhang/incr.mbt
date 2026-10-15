@@ -33,8 +33,7 @@ pub fn[T] Trie::art(art : @incr.Art[Trie[T]]) -> Trie[T] {
 pub impl[T : Eq] Eq for Trie[T] with fn equal(self, other) {
   match (self.root, other.root) {
     (Empty, Empty) => true
-    (Bucket(h, xs), Bucket(k, ys)) =>
-      h == k && xs.length() == ys.length() && xs.all(x => ys.contains(x))
+    (Bucket(h, xs), Bucket(k, ys)) => h == k && xs == ys
     (Branch(bit, l, r), Branch(other_bit, ol, or)) =>
       bit == other_bit && l == ol && r == or
     (Named(n, t), Named(on, ot)) => n == on && t == ot
@@ -168,4 +167,17 @@ pub fn[T : Eq] Trie::is_empty(self : Trie[T]) -> Bool {
 ///|
 pub fn[T : Hash + Eq] Trie::from_list(list : List[T]) -> Trie[T] {
   list.fold(Trie::empty(), (x, set) => set.add(x))
+}
+
+///|
+/// Compare set contents independently of collision-bucket order, names, and
+/// articulation identities. Unlike structural equality, this forces contents.
+pub fn[T : Hash + Eq] Trie::same_elements(
+  self : Trie[T],
+  other : Trie[T],
+) -> Bool {
+  let (count, included) = self.fold((0, true), (x, acc) => {
+    (acc.0 + 1, acc.1 && other.contains(x))
+  })
+  included && count == other.fold(0, (_, count) => count + 1)
 }

@@ -30,7 +30,8 @@ impl Hash for Key with fn hash_combine(_self, hasher) {
 test "trie collision buckets retain every distinct value" {
   let a = @catalog.Trie::empty().add(Key(1)).add(Key(2)).add(Key(3))
   let b = @catalog.Trie::empty().add(Key(3)).add(Key(2)).add(Key(1))
-  assert_true(a == b)
+  assert_true(a != b)
+  assert_true(a.same_elements(b))
   assert_eq(a.hash(), b.hash())
   assert_true(a.contains(Key(2)))
   assert_false(a.contains(Key(4)))
@@ -68,4 +69,20 @@ test "bitstring width and upstream prepend shift cases" {
   assert_eq(@catalog.BitString::new(2, 3).shift_left(1).value, 2)
   assert_eq(@catalog.BitString::new(4, 2).shift_left(2).value, 8)
   assert_eq(bits.shift_left(32).value, 0)
+}
+
+///|
+test "collision bucket order is part of incremental equality" {
+  let a = @catalog.Trie::empty().add(Key(1)).add(Key(2))
+  let b = @catalog.Trie::empty().add(Key(2)).add(Key(1))
+  let e = @incr.Engine::new()
+  let fold = @catalog.trie_fold(e, (x : Key, acc) => acc * 10 + x.0)
+  assert_eq(fold.call((a, 0)), 12)
+  assert_eq(fold.call((b, 0)), 21)
+  let input = e.cell(a)
+  let observed = e.thunk(() => input.force().fold(0, (x, acc) => acc * 10 + x.0))
+  assert_eq(observed.force(), 12)
+  input.set(b)
+  assert_eq(observed.force(), 21)
+  e.dispose()
 }

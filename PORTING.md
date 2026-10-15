@@ -50,7 +50,9 @@ baseline for a minimal from-scratch evaluator.
 
 The trie uses MoonBit's 32-bit hashes and explicit collision buckets, rather than
 reproducing Rust's seeded hashes, `Meta::min_depth`, and exact probabilistic shape.
-Pure set contents and insertion-order-independent equality are preserved.
+Set contents are preserved. Structural equality includes collision-bucket order
+to make sequential folds sound under memoization; `same_elements` provides
+insertion-order-independent set comparison.
 Bit strings validate widths up to the reference's supported maximum of 30.
 
 ## Not reproduced

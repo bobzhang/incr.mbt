@@ -89,6 +89,7 @@ pub fn[T] Trie::hash_combine(Self[T], Hasher) -> Unit
 pub fn[T : Eq] Trie::is_empty(Self[T]) -> Bool
 pub fn[T] Trie::named(@incr.Name, Self[T]) -> Self[T]
 pub fn[T : Eq] Trie::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Hash + Eq] Trie::same_elements(Self[T], Self[T]) -> Bool
 pub impl[T : Eq] Eq for Trie[T]
 pub impl[T] Hash for Trie[T]
 

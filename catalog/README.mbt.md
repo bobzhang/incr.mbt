@@ -54,9 +54,10 @@ test "readme lazy list" {
 }
 ```
 
-`Trie` is an immutable hash set with equality-checked collision buckets. Pure
-tries compare equal regardless of insertion order. Named wrappers and
-articulations also carry identity, so their structural equality does not force
+`Trie` is an immutable hash set with equality-checked collision buckets. Structural equality includes collision-bucket order because sequential folds
+can observe that order. Use `same_elements` to compare set membership regardless
+of insertion order; this operation forces articulated contents. Named wrappers
+and articulations also carry identity, so structural equality does not force
 contents. `Trie::fold` traverses immediately; `trie_fold` creates a reusable table
 whose argument is `(trie, initial_accumulator)` and caches at named boundaries.
 
