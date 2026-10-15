@@ -68,7 +68,7 @@ pub fn Engine::new() -> Engine {
 fn Engine::check_context(self : Engine) -> Unit {
   if executing_engine.val is Some(id) {
     guard id == self.id else {
-      abort("cannot mix incremental engines in a computation")
+      engine_abort("cannot mix incremental engines in a computation")
     }
   }
 }
@@ -124,7 +124,9 @@ fn Engine::dirty_users(self : Engine, node : Node) -> Unit {
   }
   while pending.pop() is Some(next) {
     guard !next.running else {
-      abort("a named allocation changed a dependency of an active computation")
+      engine_abort(
+        "a named allocation changed a dependency of an active computation",
+      )
     }
     if !next.dirty {
       next.dirty = true
@@ -147,4 +149,12 @@ pub fn[T] Engine::ns(
   let path = self.path.val.copy()
   path.push(name)
   self.path.protect(path, body)
+}
+
+///|
+// Panics abort the graph's use. Clear the global guard so an embedding that
+// catches panics (such as the test runner) can still create independent engines.
+fn[T] engine_abort(message : String) -> T {
+  executing_engine.val = None
+  abort(message)
 }

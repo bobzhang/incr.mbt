@@ -61,9 +61,11 @@ pub fn[T] Engine::thunk(self : Engine, compute : () -> T) -> Art[T] {
 /// Update an input between computations. Panics for immutable values or thunks.
 pub fn[T : Eq] Art::set(self : Art[T], value : T) -> Unit {
   guard executing_engine.val is None else {
-    abort("set is only allowed outside computations")
+    engine_abort("set is only allowed outside computations")
   }
-  guard self.node.kind is Cell else { abort("set requires a mutable cell") }
+  guard self.node.kind is Cell else {
+    engine_abort("set requires a mutable cell")
+  }
   self.write(value)
 }
 
@@ -83,7 +85,7 @@ fn[T] Art::read(self : Art[T], cycle : T?) -> T {
   if node.running {
     return match cycle {
       Some(value) => value
-      None => abort("unexpected cycle in incremental computation")
+      None => engine_abort("unexpected cycle in incremental computation")
     }
   }
   if node.kind is Thunk {
