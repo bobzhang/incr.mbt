@@ -20,6 +20,24 @@ the original failures and cover the new sequence pipeline. The equivalent Rust
 allocation and named-merge reproductions passed; the reference's five trie
 integration tests instead fail at an existing upstream `panic!("todo")`.
 
+## Fresh verification after corrections
+
+A second fresh, ephemeral Codex CLI session used the same model and ultra
+reasoning setting to verify all four corrections against the Rust source. It
+reported: "All four findings are addressed. No remaining actionable soundness
+errors or translation mistakes found against `.repos/adapton`."
+
+The focused review passed 42 tests on both Wasm GC and native, including 3,150
+mixed edit steps. It checked lazy prefixes, stable merge ties, insertion and
+deletion, reuse of unaffected regions, both traversal directions, and preservation
+of names through round trips. Its reference comparison was source-level; it did
+not repeat the broad audit, Rust suite, memory measurements, or CI.
+
+The generated sequence and stable merge checks are retained in
+`catalog/sequence_trace_test.mbt` and `catalog/merge_trace_test.mbt`. The complete
+repository suite now passes 68 tests on each of Wasm, Wasm GC, JavaScript, and
+native, with strict all-target checking and generated interfaces verified.
+
 ## Additional recommendations addressed
 
 - Added 400 deterministic named allocation/overwrite/edit traces checked against
