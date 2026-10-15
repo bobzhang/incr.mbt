@@ -23,6 +23,33 @@ pub fn name_unit() -> Name
 // Errors
 
 // Types and methods
+pub struct Art[T] {
+  // private fields
+}
+pub fn[T] Art::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Art::force(Self[T]) -> T
+pub fn[T : Eq] Art::force_cycle(Self[T], T?) -> T
+pub fn[T, U : Eq] Art::force_map(Self[T], (T) -> U) -> U
+pub fn[T] Art::hash(Self[T]) -> Int
+pub fn[T] Art::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Eq, U] Art::map(Self[T], (T) -> U) -> Self[U]
+pub fn[T] Art::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Art::set(Self[T], T) -> Unit
+pub fn[T] Art::to_repr(Self[T]) -> @debug.Repr
+pub impl[T] Eq for Art[T]
+pub impl[T] Hash for Art[T]
+pub impl[T] @debug.Debug for Art[T]
+
+pub struct Engine {
+  // private fields
+}
+pub fn[T] Engine::cell(Self, T) -> Art[T]
+pub fn Engine::new() -> Self
+pub fn[T] Engine::ns(Self, Name, () -> T raise?) -> T raise?
+pub fn[T] Engine::put(Self, T) -> Art[T]
+pub fn Engine::stats(Self) -> Stats
+pub fn[T] Engine::thunk(Self, () -> T) -> Art[T]
+
 pub(all) enum Name {
   Unit
   Int(Int)
@@ -36,6 +63,17 @@ pub fn Name::hash(Self) -> Int
 pub fn Name::hash_combine(Self, Hasher) -> Unit
 pub fn Name::not_equal(Self, Self) -> Bool
 pub fn Name::to_repr(Self) -> @debug.Repr
+
+pub struct Stats {
+  allocated : Int
+  evaluations : Int
+  cache_hits : Int
+  dirtyings : Int
+  cleanings : Int
+} derive(Eq, @debug.Debug)
+pub fn Stats::equal(Self, Self) -> Bool
+pub fn Stats::not_equal(Self, Self) -> Bool
+pub fn Stats::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
