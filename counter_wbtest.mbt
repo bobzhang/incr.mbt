@@ -63,3 +63,73 @@ test "panic exhausted dependency identity space fails before aliasing" {
   e.next_edge = COUNTER_MAX
   ignore(output.force())
 }
+
+///|
+test "high 64-bit edge identities do not alias" {
+  for
+    start in [2147483646L, 4294967294L, 9007199254740990L, 9223372036854775804L] {
+    let e = Engine::new()
+    let x = e.cell(1)
+    let old = e.thunk(() => x.force())
+    assert_eq(old.force(), 1)
+    e.next_edge = start
+    let a = e.thunk(() => x.force())
+    let b = e.thunk(() => x.force())
+    assert_eq(a.force(), 1)
+    assert_eq(b.force(), 1)
+    assert_eq(x.node.users.length(), 3)
+    // Move away from exhaustion before further observations are allocated.
+    if start > 9007199254740990L {
+      e.next_edge = 10L
+    }
+    x.set(2)
+    assert_eq(old.force(), 2)
+    assert_eq(a.force(), 2)
+    assert_eq(b.force(), 2)
+    e.dispose()
+  }
+}
+
+///|
+test "event counters reach and remain at maximum" {
+  let e = Engine::new()
+  let x = e.cell(1)
+  let out = e.thunk(() => x.force())
+  ignore(out.force())
+  e.evaluations = COUNTER_MAX - 1L
+  e.cache_hits = COUNTER_MAX - 1L
+  e.cleanings = COUNTER_MAX - 1L
+  e.dirtyings = COUNTER_MAX - 1L
+  ignore(out.force())
+  x.set(2)
+  assert_eq(out.force(), 2)
+  assert_eq(e.evaluations, COUNTER_MAX)
+  assert_eq(e.cache_hits, COUNTER_MAX)
+  assert_eq(e.cleanings, COUNTER_MAX)
+  assert_eq(e.dirtyings, COUNTER_MAX)
+  x.set(3)
+  assert_eq(out.force(), 3)
+  ignore(out.force())
+  assert_eq(e.evaluations, COUNTER_MAX)
+  assert_eq(e.cache_hits, COUNTER_MAX)
+  assert_eq(e.cleanings, COUNTER_MAX)
+  assert_eq(e.dirtyings, COUNTER_MAX)
+  e.dispose()
+}
+
+///|
+test "engine IDs preserve low and high bits" {
+  for start in [4294967295L, 9007199254740991L, COUNTER_MAX - 2L] {
+    next_engine.protect(start, () => {
+      let a = Engine::new()
+      let b = Engine::new()
+      let x = a.cell(1)
+      let y = b.cell(1)
+      assert_true(x != y)
+      assert_eq(a.id, start)
+      assert_eq(b.id, start + 1L)
+      a.dispose()
+      b.dispose()
+    })
+  }
+}
