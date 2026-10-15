@@ -8,6 +8,21 @@ There are no external dependencies.
 The port is based on the local Rust Adapton 0.3.31 reference in `.repos/adapton`.
 The API is adapted to MoonBit; see [PORTING.md](PORTING.md) for coverage and differences.
 
+## Interactive example: delivery dispatch
+
+[Dispatch](examples/dispatch/README.md) is a city dashboard with 600 delivery
+quotes powered by this library. Close a bridge, change fuel prices, or take a
+depot offline, and watch exactly which computations rerun. A guided story shows
+local invalidation, projection reads, and deferred work for hidden views; every
+result is checked against an independent full evaluator.
+
+```sh
+python3 examples/dispatch/build.py
+# Open _build/dispatch/index.html in your browser.
+```
+
+The generated HTML is self-contained and can be shared as a single file.
+
 ## Start with cells and thunks
 
 Create one engine, put changing inputs in cells, and read them with `force` inside
