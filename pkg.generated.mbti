@@ -95,10 +95,10 @@ pub fn NodeInfo::to_repr(Self) -> @debug.Repr
 
 pub struct Stats {
   allocated : Int
-  evaluations : Int
-  cache_hits : Int
-  dirtyings : Int
-  cleanings : Int
+  evaluations : Int64
+  cache_hits : Int64
+  dirtyings : Int64
+  cleanings : Int64
 } derive(Eq, @debug.Debug)
 pub fn Stats::equal(Self, Self) -> Bool
 pub fn Stats::not_equal(Self, Self) -> Bool

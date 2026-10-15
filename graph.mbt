@@ -1,4 +1,17 @@
 ///|
+// Identities must never wrap and alias an older live engine or edge.
+const COUNTER_MAX : Int64 = 9223372036854775807L
+
+///|
+fn next_counter(value : Int64) -> Int64 {
+  if value == COUNTER_MAX {
+    value
+  } else {
+    value + 1
+  }
+}
+
+///|
 priv enum Kind {
   Constant
   Cell
@@ -15,7 +28,7 @@ priv struct Node {
   mut evaluating : Bool
   mut running : Bool
   deps : Array[Edge]
-  users : Map[Int32, Edge]
+  users : Map[Int64, Edge]
 }
 
 ///|
@@ -26,7 +39,7 @@ priv enum Effect {
 
 ///|
 priv struct Edge {
-  id : Int32
+  id : Int64
   source : Node
   target : Node
   differs : () -> Bool
@@ -41,25 +54,28 @@ pub struct Engine {
   priv mut disposed : Bool
   priv releases : Array[() -> Unit]
   priv naive : Bool
-  priv id : Int32
+  priv id : Int64
   priv current : Ref[Node?]
   priv path : Ref[Array[Name]]
   priv nodes : Array[Node]
-  priv mut next_edge : Int32
-  priv mut evaluations : Int32
-  priv mut cache_hits : Int32
-  priv mut dirtyings : Int32
-  priv mut cleanings : Int32
+  priv mut next_edge : Int64
+  priv mut evaluations : Int64
+  priv mut cache_hits : Int64
+  priv mut dirtyings : Int64
+  priv mut cleanings : Int64
 }
 
 ///|
-let next_engine : Ref[Int32] = Ref(0)
+let next_engine : Ref[Int64] = Ref(0)
 
 ///|
-let executing_engine : Ref[Int32?] = Ref(None)
+let executing_engine : Ref[Int64?] = Ref(None)
 
 ///|
 pub fn Engine::new(naive~ : Bool = false) -> Engine {
+  guard next_engine.val >= 0 && next_engine.val < COUNTER_MAX else {
+    engine_abort("engine identity space exhausted")
+  }
   let id = next_engine.val
   next_engine.val += 1
   {
@@ -115,6 +131,9 @@ fn Engine::observe(
   effect : Effect,
 ) -> Unit {
   if self.current.val is Some(source) {
+    guard self.next_edge >= 0 && self.next_edge < COUNTER_MAX else {
+      engine_abort("dependency identity space exhausted")
+    }
     let edge = {
       id: self.next_edge,
       source,
@@ -160,7 +179,7 @@ fn Engine::dirty_users(self : Engine, node : Node) -> Unit {
     }
     if !next.dirty {
       next.dirty = true
-      self.dirtyings += 1
+      self.dirtyings = next_counter(self.dirtyings)
       for _, edge in next.users {
         // A dirty result affects observers, not callers that only allocated
         // this thunk. Its arguments have not changed in this propagation step.

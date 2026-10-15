@@ -113,12 +113,12 @@ fn[T] Art::read(self : Art[T], cycle : T?) -> T {
               break
             }
           }
-          engine.cleanings += 1
+          engine.cleanings = next_counter(engine.cleanings)
         }
         if rerun || node.changed {
           node.detach()
           let compute = self.compute.unwrap()
-          engine.evaluations += 1
+          engine.evaluations = next_counter(engine.evaluations)
           node.evaluating = true
           let value = engine.path.protect(node.path, () => {
             engine.current.protect(Some(node), compute)
@@ -126,7 +126,7 @@ fn[T] Art::read(self : Art[T], cycle : T?) -> T {
           node.evaluating = false
           self.value = Some(value)
         } else {
-          engine.cache_hits += 1
+          engine.cache_hits = next_counter(engine.cache_hits)
         }
         node.dirty = false
         node.changed = false

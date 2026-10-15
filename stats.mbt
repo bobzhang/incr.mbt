@@ -1,11 +1,13 @@
 ///|
-/// Cumulative counters. Evaluation counts count thunk bodies, not cell reads.
+/// Cumulative 64-bit event counters, saturating at Int64 maximum.
+/// Evaluation counts count thunk bodies, not cell reads.
+/// `allocated` is the current graph node count and remains a 32-bit array size.
 pub struct Stats {
   allocated : Int32
-  evaluations : Int32
-  cache_hits : Int32
-  dirtyings : Int32
-  cleanings : Int32
+  evaluations : Int64
+  cache_hits : Int64
+  dirtyings : Int64
+  cleanings : Int64
 } derive(Eq, Debug)
 
 ///|

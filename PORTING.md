@@ -81,5 +81,13 @@ restoration, and misuse rejection. Additional tests compare direct, incremental,
 and naive results across 300 edit sequences, verify hash collisions, and assert
 reuse counts for lazy lists and tree edits. README examples run as tests.
 
+`internal/stress` adds reproducible randomized differential DAG, nominal-allocation,
+and mixed collection traces against independent plain-array oracles. The same
+kernels drive the sustained native runner in `stress/`, including bounded-key
+reuse, explicit unique-key growth, repeated disposal, and depth probes. These
+checks improve confidence in the supported computation contract; they do not
+establish memory bounds for arbitrary growing applications or remove backend
+stack limits. See [stress methodology](stress/README.md).
+
 Run `moon test`, `moon test --target js`, and `moon test --target native`;
 `moon check --target all` checks the complete supported backend set.

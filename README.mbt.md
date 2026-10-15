@@ -101,8 +101,10 @@ The `dii/incr/catalog` package includes named articulated lists, lazy mapping an
 filtering, trees, memoized tree folds and merge sort, persistent hash trie sets,
 and bit strings. See the [collection examples](catalog/README.mbt.md).
 
-`engine.stats()` returns cumulative allocation, evaluation, cache hit, dirtying,
-and cleaning counts. `engine.snapshot()` returns detached graph metadata with
+`engine.stats()` returns the current graph node count and cumulative evaluation,
+cache hit, dirtying, and cleaning counts. Event counters use `Int64` and saturate
+at its maximum instead of wrapping; the node count remains `Int`.
+`engine.snapshot()` returns detached graph metadata with
 ordered dependency lists. `Engine::new(naive=true)` reruns each demanded thunk,
 which is useful for checking incremental results against fresh evaluation.
 
@@ -150,6 +152,12 @@ the public API. The source reference under `.repos/` is not needed to build.
 GitHub Actions runs formatting, interface checks, all-backend type checking,
 and Wasm GC, JavaScript, and native tests on Linux and macOS, using both the
 pinned `0.10.15+943464bfa` toolchain and latest.
+
+The [stress suite](stress/README.md) adds seeded differential checks against plain
+array oracles, reusable-name collection edits, lifecycle tests, and isolated
+growth/depth probes. Run `python3 stress/run.py --profile full --soak-seconds 300`
+for a sustained native run with replay commands and memory measurements. The
+manual **Extended stress** GitHub workflow runs it on Linux and macOS.
 
 ## Benchmarks
 
