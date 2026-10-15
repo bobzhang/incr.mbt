@@ -127,3 +127,53 @@ test "named sequence edits flow through construction aggregation sorting and rou
   }
   e.dispose()
 }
+
+///|
+struct Counted {
+  value : Int32
+  hashes : Ref[Int32]
+}
+
+///|
+impl Eq for Counted with fn equal(self, other) {
+  self.value == other.value
+}
+
+///|
+impl Hash for Counted with fn hash_combine(self, hasher) {
+  self.hashes.val += 1
+  hasher.combine(self.value)
+}
+
+///|
+test "list-tree edits reuse hashing work in unchanged named suffixes" {
+  let e = @incr.Engine::new()
+  let prefix_hashes = Ref(0)
+  let suffix_hashes = Ref(0)
+  let suffix : @catalog.List[Counted] = Named(
+    @incr.name_of_string("suffix"),
+    @catalog.List::from_array([
+      { value: 7, hashes: suffix_hashes, },
+      { value: 8, hashes: suffix_hashes, },
+    ]),
+  )
+  let build = @catalog.tree_of_list(e)
+  let make_input = (values : Array[Int32]) => {
+    @catalog.List::Named(
+      @incr.name_of_string("root"),
+      @catalog.List::from_array(
+        values.map(value => { value, hashes: prefix_hashes, }),
+      ).append(suffix),
+    )
+  }
+  let first = build.named(@incr.name_unit(), make_input([1, 2]))
+  assert_eq(first.force().to_array().map(x => x.value), [1, 2, 7, 8])
+  let before = suffix_hashes.val
+  assert_true(before > 0)
+  for values in [[1, 9, 2], [2], []] {
+    let tree = build.named(@incr.name_unit(), make_input(values))
+    assert_eq(tree.force().to_array().map(x => x.value), values + [7, 8])
+    assert_eq(suffix_hashes.val, before)
+  }
+  e.dispose()
+}

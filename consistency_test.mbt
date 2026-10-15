@@ -94,3 +94,46 @@ test "namespaces restore after checked errors" {
   }
   assert_true(cells.cell(name, 42) == original)
 }
+
+///|
+test "generated named overwrite traces agree with a direct evaluation oracle" {
+  let e = @incr.Engine::new()
+  let input = e.cell((0, 0, true, 0))
+  let outputs = @incr.Cells::new(e)
+  let child_name = @incr.name_of_string("child")
+  let output_name = @incr.name_of_string("output")
+  let memo = @incr.Memo::new(e, (bias : Int32) => {
+    let (a, b, choose, _) = input.force()
+    if choose {
+      a + bias
+    } else {
+      b - bias
+    }
+  })
+  let producer = e.thunk(() => {
+    let bias = input.force_map(x => x.3)
+    let child = memo.named(child_name, bias)
+    outputs.cell(output_name, child.force())
+  })
+  let root = e.thunk(() => producer.force().force() * 2)
+  for i in 0..<400 {
+    let a = i * 17 % 41
+    let b = i * 29 % 43
+    let choose = i % 3 == 0
+    let bias = i * 7 % 11
+    input.set((a, b, choose, bias))
+    if i % 2 == 0 {
+      ignore(memo.named(child_name, i + 100))
+    }
+    if i % 5 == 0 {
+      ignore(outputs.cell(output_name, -i - 1))
+    }
+    let expected = 2 * (if choose { a + bias } else { b - bias })
+    assert_eq(root.force(), expected)
+    if i % 7 == 0 {
+      producer.force().set(999)
+      assert_eq(root.force(), expected)
+    }
+  }
+  e.dispose()
+}

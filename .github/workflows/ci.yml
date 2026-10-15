@@ -18,6 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+        moonbit: ['0.10.15+943464bfa', latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
@@ -25,6 +26,8 @@ jobs:
         with:
           node-version: 24
       - name: Install MoonBit
+        env:
+          MOONBIT_INSTALL_VERSION: ${{ matrix.moonbit }}
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"

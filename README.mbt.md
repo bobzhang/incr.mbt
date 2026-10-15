@@ -132,7 +132,8 @@ which is useful for checking incremental results against fresh evaluation.
 
 ## Build and test
 
-Validated with MoonBit `0.1.20261012`. From the repository root:
+Validated with MoonBit `0.1.20261012` / compiler `0.10.15+943464bfa`.
+From the repository root:
 
 ```sh
 moon check --target all --warn-list +unnecessary_annotation
@@ -147,6 +148,7 @@ moon info
 README examples are executable tests. Generated `pkg.generated.mbti` files record
 the public API. The source reference under `.repos/` is not needed to build.
 GitHub Actions runs formatting, interface checks, all-backend type checking,
-and Wasm GC, JavaScript, and native tests on Linux and macOS.
+and Wasm GC, JavaScript, and native tests on Linux and macOS, using both the
+pinned `0.10.15+943464bfa` toolchain and latest.
 
 License: MPL-2.0, following the Adapton reference. See [LICENSE](LICENSE).
