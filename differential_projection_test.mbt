@@ -76,7 +76,7 @@ test "random projected thunk branches with delayed demands" {
         )
       }
       if step % 101 == 0 || step == 19999 {
-        for i = 31; i >= 8; i = i - 1 {
+        for i in 31>=..8 {
           assert_eq(
             nodes[i].force(),
             expected[i],
