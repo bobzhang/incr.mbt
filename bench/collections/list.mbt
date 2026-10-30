@@ -11,7 +11,7 @@ fn make_chunk(
   if step is Some(s) && s % 2 == 0 {
     result = Cons(edit_value(s), result)
   }
-  for offset = 15; offset >= 0; offset = offset - 1 {
+  for offset in 15>=..0 {
     result = Cons(values[chunk * 16 + offset], result)
   }
   result
@@ -32,7 +32,7 @@ fn list_workload(
   })
   let tails : Array[@catalog.List[Int32]] = Array::make(chunks, Nil)
   let mut input : @catalog.List[Int32] = Nil
-  for chunk = chunks - 1; chunk >= 0; chunk = chunk - 1 {
+  for chunk in (chunks - 1)>=..0 {
     tails[chunk] = input
     cells[chunk].set(make_chunk(chunk, values, input, None))
     input = Named(@incr.name_of_int(chunk), Art(cells[chunk]))
