@@ -85,13 +85,11 @@ pub fn Session::Session() -> Session {
   })
   let summary = tracked(engine, trace, "summary", () => {
     let selected = region.force()
-    let result : Array[Quote] = []
-    for id, quote in quotes {
-      if selected < 0 || id % 3 == selected {
-        result.push(quote.force())
+    [
+      for id, quote in quotes if selected < 0 || id % 3 == selected => {
+        quote.force()
       }
-    }
-    result
+    ]
   })
   {
     engine,

@@ -47,8 +47,7 @@ fn fresh(
     let mut minutes = 0
     if plan.depot >= 0 {
       cents = 250 + plan.km * inputs.fuel / 10
-      for line in 0..<shipment.units.length() {
-        let count = shipment.units[line]
+      for line, count in shipment.units {
         cents += count * [4, 5, 6, 7, 8][line % 5]
         cents += (count / 3 + (if count % 3 == 0 { 0 } else { 1 })) * 7
       }
