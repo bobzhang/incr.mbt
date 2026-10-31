@@ -21,8 +21,7 @@ impl Compare for MergeItem with fn compare(self, other) {
 ///|
 fn merge_input(items : Array[MergeItem]) -> @catalog.List[MergeItem] {
   let mut list : @catalog.List[MergeItem] = Nil
-  for i in (items.length() - 1)>=..0 {
-    let item = items[i]
+  for item in items.rev_iter() {
     list = Named(@incr.name_of_int(item.id), Cons(item, list))
   }
   list
