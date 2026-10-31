@@ -173,8 +173,12 @@ moon info
 README examples are executable tests. Generated `pkg.generated.mbti` files record
 the public API. The source reference under `.repos/` is not needed to build.
 GitHub Actions runs formatting, interface checks, all-backend type checking,
-and Wasm GC, JavaScript, and native tests on Linux and macOS, using both the
-pinned `0.10.15+943464bfa` toolchain and latest.
+and Wasm GC, JavaScript, and native tests on Linux and macOS with the current
+MoonBit release (`latest`), so a pull request merges as soon as today's
+toolchain is happy. The nightly channel runs the same suite on `main` and on a
+weekly schedule, which shows upstream drift without blocking merges. The
+generated-interface comparison tolerates the `Int`/`Int32` respelling new
+compilers introduce, because those are the same types.
 
 The [stress suite](stress/README.md) adds seeded differential checks against plain
 array oracles, reusable-name collection edits, lifecycle tests, and isolated
