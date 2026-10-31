@@ -129,7 +129,7 @@ pub fn engine(seed : UInt32, steps : Int32) -> Int64 raise {
       checksum += actual.to_int64()
     }
     if step % 97 == 0 || step == steps - 1 {
-      for i = 47; i >= 0; i = i - 1 {
+      for i in 47>=..0 {
         expect(
           nodes[i].force(),
           expected[i + 16],
