@@ -17,19 +17,6 @@ fn random_rule(rng : Random, index : Int32) -> Rule {
 }
 
 ///|
-fn graph_read(
-  inputs : Array[@incr.Art[(Int32, Int32)]],
-  nodes : Array[@incr.Art[Int32]],
-  index : Int32,
-) -> Int32 {
-  if index < 16 {
-    inputs[index].force_map(p => p.0)
-  } else {
-    nodes[index - 16].force()
-  }
-}
-
-///|
 // This interpreter uses only ordinary arrays, never cached nodes or naive mode.
 fn interpret(
   inputs : Array[(Int32, Int32)],
@@ -66,7 +53,13 @@ pub fn engine(seed : UInt32, steps : Int32) -> Int64 raise {
     nodes.push(
       e.thunk(() => {
         let r = controls[i].force()
-        let read = index => graph_read(cells, nodes, index)
+        let read = index => {
+          if index < 16 {
+            cells[index].force_map(p => p.0)
+          } else {
+            nodes[index - 16].force()
+          }
+        }
         let result = match r.mode {
           0 => cells[r.source].force_map(p => p.0)
           1 => cells[r.source].force_map(p => p.1)

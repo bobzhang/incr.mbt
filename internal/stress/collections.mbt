@@ -10,13 +10,11 @@ fn edit_entries(
       id = (id + 1) % 96
     }
     let at = rng.pick(entries.length() + 1)
-    entries[:at].to_owned() +
-    [(id, rng.pick(41) - 20)] +
-    entries[at:].to_owned()
+    (entries[:at] + [(id, rng.pick(41) - 20)] + entries[at:]).to_owned()
   } else {
     let at = rng.pick(entries.length())
     match op {
-      3 => entries[:at].to_owned() + entries[at + 1:].to_owned()
+      3 => (entries[:at] + entries[at + 1:]).to_owned()
       4 => {
         entries[at] = (entries[at].0, rng.pick(41) - 20)
         entries
@@ -24,9 +22,7 @@ fn edit_entries(
       5 => entries.rev()
       6 => {
         let to = rng.pick(entries.length())
-        let item = entries[at]
-        entries[at] = entries[to]
-        entries[to] = item
+        entries.swap(at, to)
         entries
       }
       7 => if rng.pick(64) == 0 { [] } else { entries }
@@ -130,7 +126,7 @@ pub fn collections(seed : UInt32, steps : Int32) -> Int64 raise {
       0 =>
         expect(
           sorted.force().to_array(limit=prefix),
-          ordered[:Int32::min(prefix, ordered.length())].to_owned(),
+          ordered[:prefix].to_owned(),
           seed,
           step,
           "sort prefix",
@@ -138,7 +134,7 @@ pub fn collections(seed : UInt32, steps : Int32) -> Int64 raise {
       1 =>
         expect(
           filtered.force().to_array(limit=prefix),
-          filtered_values[:Int32::min(prefix, filtered_values.length())].to_owned(),
+          filtered_values[:prefix].to_owned(),
           seed,
           step,
           "filter prefix",
@@ -154,7 +150,7 @@ pub fn collections(seed : UInt32, steps : Int32) -> Int64 raise {
       3 =>
         expect(
           mapped.force().to_array(limit=prefix),
-          mapped_values[:Int32::min(prefix, mapped_values.length())].to_owned(),
+          mapped_values[:prefix].to_owned(),
           seed,
           step,
           "map prefix",
