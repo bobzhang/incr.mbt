@@ -62,8 +62,11 @@ jobs:
   nightly:
     # The nightly channel is a moving target, so it runs on main and on a
     # schedule and never gates a pull request: a nightly regression is visible
-    # here without blocking a merge.
+    # here without blocking a merge. continue-on-error keeps a broken upstream
+    # nightly from turning main red, which has already happened once: the
+    # install step itself failed to bundle core for the LLVM backend.
     if: github.event_name != 'pull_request'
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
