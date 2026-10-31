@@ -11,8 +11,7 @@ fn sequence_input(
   layout : Int32,
 ) -> @catalog.List[Int32] {
   let mut tail : @catalog.List[Int32] = Named(@incr.name_of_string("end"), Nil)
-  for i in (entries.length() - 1)>=..0 {
-    let (id, value) = entries[i]
+  for (id, value) in entries.rev_iter() {
     let name = @incr.name_of_int(id)
     tail = match layout {
       0 => Named(name, Cons(value, tail))
