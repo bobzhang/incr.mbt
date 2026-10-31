@@ -97,10 +97,8 @@ pub fn Engine::Engine(naive~ : Bool = false) -> Engine {
 ///|
 fn Engine::check_context(self : Engine) -> Unit {
   guard !self.disposed else { engine_abort("engine has been disposed") }
-  if executing_engine.val is Some(id) {
-    guard id == self.id else {
-      engine_abort("cannot mix incremental engines in a computation")
-    }
+  if executing_engine.val is Some(id) && id != self.id {
+    engine_abort("cannot mix incremental engines in a computation")
   }
 }
 
