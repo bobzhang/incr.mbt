@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Forward-compatibility signal from the nightly channel, off the pull
+    # request path.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,7 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        moonbit: ['0.10.15+943464bfa', latest]
+        # A rolling channel, never a pinned version: a pull request merges as
+        # soon as the current toolchain is happy. The `nightly` job below
+        # reports forward compatibility separately, without gating merges.
+        moonbit: [latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
@@ -37,9 +45,7 @@ jobs:
       - name: Check formatting
         run: moon fmt --check
       - name: Verify public interfaces
-        run: |
-          moon info
-          git diff --exit-code
+        run: bash .github/scripts/verify-interfaces.sh
       - name: Test WebAssembly GC
         run: moon test --target wasm-gc
       - name: Test JavaScript
@@ -53,6 +59,37 @@ jobs:
       - name: Run example
         run: moon run cmd/demo
 
+  nightly:
+    # The nightly channel is a moving target, so it runs on main and on a
+    # schedule and never gates a pull request: a nightly regression is visible
+    # here without blocking a merge.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Install MoonBit
+        env:
+          MOONBIT_INSTALL_VERSION: nightly
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: moon version --all
+      - name: Type check all backends
+        run: moon check --target all --warn-list +unnecessary_annotation --deny-warn
+      - name: Check formatting
+        run: moon fmt --check
+      - name: Verify public interfaces
+        run: bash .github/scripts/verify-interfaces.sh
+      - name: Test WebAssembly GC
+        run: moon test --target wasm-gc
+      - name: Test JavaScript
+        run: moon test --target js
+      - name: Test native
+        run: moon test --target native
+
   benchmark-smoke:
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +100,9 @@ jobs:
           repository: Adapton/adapton.rust
           ref: ea903dd961bee3568c483a18a72983d9f4ef5ed2
           path: .repos/adapton
-      - name: Install pinned MoonBit
+      - name: Install MoonBit
+        # Pinned on purpose: benchmark numbers are compared against recorded
+        # reference results, so the compiler must not drift between runs.
         env:
           MOONBIT_INSTALL_VERSION: 0.10.15+943464bfa
         run: |
