@@ -107,12 +107,7 @@ fn[T] Art::read(self : Art[T], cycle : T?) -> T {
         if node.dirty && !rerun {
           // Stop at the first changed dependency. Later edges can belong to a
           // branch that is no longer demanded (including division by zero).
-          for edge in node.deps {
-            if (edge.differs)() {
-              rerun = true
-              break
-            }
-          }
+          rerun = node.deps.any(edge => (edge.differs)())
           engine.cleanings = next_counter(engine.cleanings)
         }
         if rerun || node.changed {
