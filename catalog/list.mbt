@@ -19,7 +19,7 @@ pub extend List with Debug::{to_repr}
 ///|
 pub fn[T] List::from_array(values : ArrayView[T]) -> List[T] {
   let mut result : List[T] = Nil
-  for i = values.length() - 1; i >= 0; i = i - 1 {
+  for i in (values.length() - 1)>=..0 {
     result = Cons(values[i], result)
   }
   result
@@ -71,7 +71,7 @@ pub fn[T : Eq, R] List::fold(
 ) -> R {
   let values = self.to_array()
   let mut result = initial
-  for i = values.length() - 1; i >= 0; i = i - 1 {
+  for i in (values.length() - 1)>=..0 {
     result = body(values[i], result)
   }
   result

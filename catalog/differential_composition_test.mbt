@@ -48,7 +48,7 @@ test "composed consumers and branching trie across mixed edits" {
       let length = composition_next(rng) % 25
       let values = entries[:length].map(x => x.1)
       let mut list : @catalog.List[Int32] = Nil
-      for i = length - 1; i >= 0; i = i - 1 {
+      for i in (length - 1)>=..0 {
         let (id, value) = entries[i]
         let name = @incr.name_of_int(id)
         list = Named(name, Art(cells.cell(name, Cons(value, list))))

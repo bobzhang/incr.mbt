@@ -29,7 +29,7 @@ pub fn[T] Tree::from_array(values : ArrayView[T]) -> Tree[T] {
       let middle = start + (end - start) / 2
       let (left, ll) = build(start, middle)
       let (right, rl) = build(middle, end)
-      let level = (if ll > rl { ll } else { rl }) + 1
+      let level = ll.max(rl) + 1
       (Bin(level, left, right), level)
     }
   }

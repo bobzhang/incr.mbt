@@ -21,7 +21,7 @@ impl Compare for MergeItem with fn compare(self, other) {
 ///|
 fn merge_input(items : Array[MergeItem]) -> @catalog.List[MergeItem] {
   let mut list : @catalog.List[MergeItem] = Nil
-  for i = items.length() - 1; i >= 0; i = i - 1 {
+  for i in (items.length() - 1)>=..0 {
     let item = items[i]
     list = Named(@incr.name_of_int(item.id), Cons(item, list))
   }
@@ -105,7 +105,7 @@ test "lazy merge reuses unchanged named suffix after prefix insertion deletion" 
   assert_true(before > 0)
   for prefix in [[-2], [-2, -1], [], [-1], []] {
     let mut left = suffix
-    for i = prefix.length() - 1; i >= 0; i = i - 1 {
+    for i in (prefix.length() - 1)>=..0 {
       let value : MergeItem = { key: prefix[i], id: 1000 + i, comparisons, }
       left = Named(@incr.name_of_int(value.id), Cons(value, left))
     }
