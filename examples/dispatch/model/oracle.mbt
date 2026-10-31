@@ -49,7 +49,7 @@ fn fresh(
       cents = 250 + plan.km * inputs.fuel / 10
       for line, count in shipment.units {
         cents += count * [4, 5, 6, 7, 8][line % 5]
-        cents += (count / 3 + (if count % 3 == 0 { 0 } else { 1 })) * 7
+        cents += (count + 2) / 3 * 7
       }
       minutes = plan.minutes + shipment.id % 9
     }
