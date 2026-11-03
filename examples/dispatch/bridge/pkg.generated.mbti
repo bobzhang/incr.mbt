@@ -4,7 +4,7 @@ package "bobzhang/incr/examples/dispatch/bridge"
 // Values
 pub fn reset() -> String
 
-pub fn update(Int, Int, Int) -> String
+pub fn update(Int32, Int32, Int32) -> String
 
 // Errors
 

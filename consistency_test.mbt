@@ -35,7 +35,8 @@ test "naive mode reruns demanded thunks" {
 }
 
 ///|
-struct Collision(Int32) derive(Eq)
+#derive(Eq)
+struct Collision(Int32)
 
 ///|
 impl Hash for Collision with fn hash_combine(_self, hasher) {

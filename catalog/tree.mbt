@@ -1,12 +1,13 @@
 ///|
 /// Persistent trees. Levels are preserved for applications that build treaps.
+#derive(Eq, Hash, Debug)
 pub(all) enum Tree[T] {
   Nil
   Leaf(T)
   Bin(Int32, Tree[T], Tree[T])
   Named(@incr.Name, Int32, Tree[T], Tree[T])
   Art(@incr.Art[Tree[T]])
-} derive(Eq, Hash, Debug)
+}
 
 ///|
 pub extend Tree with Eq::{equal, not_equal}

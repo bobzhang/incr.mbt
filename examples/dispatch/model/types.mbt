@@ -1,27 +1,31 @@
 ///|
 /// Fictional shipment data; distances and prices are deliberately deterministic.
+#derive(Eq, ToJson)
 pub struct Shipment {
   id : Int32
   zone : Int32
   units : Array[Int32]
   deadline : Int32
-} derive(Eq, ToJson)
+}
 
 ///|
+#derive(Eq, ToJson)
 pub struct Depot {
   online : Bool
   label : String
-} derive(Eq, ToJson)
+}
 
 ///|
+#derive(Eq, ToJson)
 pub struct Plan {
   depot : Int32
   minutes : Int32
   km : Int32
   detour : Bool
-} derive(Eq, ToJson)
+}
 
 ///|
+#derive(Eq, ToJson)
 pub struct Quote {
   id : Int32
   zone : Int32
@@ -29,18 +33,20 @@ pub struct Quote {
   minutes : Int32
   depot : Int32
   late : Bool
-} derive(Eq, ToJson)
+}
 
 ///|
+#derive(ToJson)
 pub struct Inputs {
   depots : Array[Depot]
   traffic : Array[Int32]
   fuel : Int32
   bridge_closed : Bool
   region : Int32
-} derive(ToJson)
+}
 
 ///|
+#derive(ToJson)
 pub struct Report {
   inputs : Inputs
   quotes : Array[Quote]
@@ -54,7 +60,7 @@ pub struct Report {
   total_cents : Int32
   late : Int32
   unavailable : Int32
-} derive(ToJson)
+}
 
 ///|
 pub struct Session {

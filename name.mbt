@@ -1,5 +1,6 @@
 ///|
 /// Structural names used by typed cell stores, memo tables, and namespaces.
+#derive(Eq, Hash, Debug)
 pub(all) enum Name {
   Unit
   Int(Int32)
@@ -7,7 +8,7 @@ pub(all) enum Name {
   Pair(Name, Name)
   Left(Name)
   Right(Name)
-} derive(Eq, Hash, Debug)
+}
 
 ///|
 pub fn name_unit() -> Name {
