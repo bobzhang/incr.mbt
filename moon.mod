@@ -1,6 +1,6 @@
 name = "bobzhang/incr"
 
-version = "0.1.0"
+version = "0.1.1"
 
 repository = "https://github.com/bobzhang/incr.mbt"
 
