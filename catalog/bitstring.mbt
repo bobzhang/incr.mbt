@@ -1,9 +1,10 @@
 ///|
 /// A length/value pair so leading zero bits remain significant (maximum 30 bits).
+#derive(Eq, Hash, Debug)
 pub struct BitString {
   length : Int32
   value : Int32
-} derive(Eq, Hash, Debug)
+}
 
 ///|
 pub extend BitString with Eq::{equal, not_equal}

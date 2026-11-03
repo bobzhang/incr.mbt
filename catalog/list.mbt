@@ -1,11 +1,12 @@
 ///|
 /// Persistent lists with named memoization boundaries and incremental tails.
+#derive(Eq, Hash, Debug)
 pub(all) enum List[T] {
   Nil
   Cons(T, List[T])
   Named(@incr.Name, List[T])
   Art(@incr.Art[List[T]])
-} derive(Eq, Hash, Debug)
+}
 
 ///|
 pub extend List with Eq::{equal, not_equal}

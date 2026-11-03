@@ -12,7 +12,7 @@ pub fn name_fork3(Name) -> (Name, Name, Name)
 
 pub fn name_fork4(Name) -> (Name, Name, Name, Name)
 
-pub fn name_of_int(Int) -> Name
+pub fn name_of_int(Int32) -> Name
 
 pub fn name_of_string(String) -> Name
 
@@ -30,7 +30,7 @@ pub fn[T] Art::equal(Self[T], Self[T]) -> Bool
 pub fn[T : Eq] Art::force(Self[T]) -> T
 pub fn[T : Eq] Art::force_cycle(Self[T], T?) -> T
 pub fn[T, U : Eq] Art::force_map(Self[T], (T) -> U) -> U
-pub fn[T] Art::hash(Self[T]) -> Int
+pub fn[T] Art::hash(Self[T]) -> Int32
 pub fn[T] Art::hash_combine(Self[T], Hasher) -> Unit
 pub fn[T : Eq, U] Art::map(Self[T], (T) -> U) -> Self[U]
 pub fn[T] Art::not_equal(Self[T], Self[T]) -> Bool
@@ -68,38 +68,41 @@ pub fn[A : Eq, T] Memo::named(Self[A, T], Name, A) -> Art[T]
 pub fn[A, T] Memo::recursive(Engine, (Self[A, T], A) -> T) -> Self[A, T]
 pub fn[A : Hash + Eq, T] Memo::structural(Self[A, T], A) -> Art[T]
 
+#derive(Eq, Hash, @debug.Debug)
 pub(all) enum Name {
   Unit
-  Int(Int)
+  Int(Int32)
   Text(String)
   Pair(Name, Name)
   Left(Name)
   Right(Name)
-} derive(Eq, Hash, @debug.Debug)
+}
 pub fn Name::equal(Self, Self) -> Bool
-pub fn Name::hash(Self) -> Int
+pub fn Name::hash(Self) -> Int32
 pub fn Name::hash_combine(Self, Hasher) -> Unit
 pub fn Name::not_equal(Self, Self) -> Bool
 pub fn Name::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct NodeInfo {
-  id : Int
+  id : Int32
   kind : String
   path : Array[Name]
   dirty : Bool
-  dependencies : Array[Int]
-} derive(Eq, @debug.Debug)
+  dependencies : Array[Int32]
+}
 pub fn NodeInfo::equal(Self, Self) -> Bool
 pub fn NodeInfo::not_equal(Self, Self) -> Bool
 pub fn NodeInfo::to_repr(Self) -> @debug.Repr
 
+#derive(Eq, @debug.Debug)
 pub struct Stats {
-  allocated : Int
+  allocated : Int32
   evaluations : Int64
   cache_hits : Int64
   dirtyings : Int64
   cleanings : Int64
-} derive(Eq, @debug.Debug)
+}
 pub fn Stats::equal(Self, Self) -> Bool
 pub fn Stats::not_equal(Self, Self) -> Bool
 pub fn Stats::to_repr(Self) -> @debug.Repr

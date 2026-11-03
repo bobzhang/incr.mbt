@@ -1,13 +1,14 @@
 ///|
 /// A detached graph snapshot. Dependencies retain their observation order.
 /// Values are intentionally omitted so reflection works across all result types.
+#derive(Eq, Debug)
 pub struct NodeInfo {
   id : Int32
   kind : String
   path : Array[Name]
   dirty : Bool
   dependencies : Array[Int32]
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend NodeInfo with Eq::{equal, not_equal}

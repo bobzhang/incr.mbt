@@ -1,10 +1,11 @@
 ///|
+#derive(Eq)
 priv struct Rule {
   mode : Int32
   a : Int32
   b : Int32
   source : Int32
-} derive(Eq)
+}
 
 ///|
 fn random_rule(rng : Random, index : Int32) -> Rule {

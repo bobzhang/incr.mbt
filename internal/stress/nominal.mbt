@@ -1,5 +1,6 @@
 ///|
-priv struct Collision(Int32) derive(Eq)
+#derive(Eq)
+priv struct Collision(Int32)
 
 ///|
 impl Hash for Collision with fn hash_combine(_self, hasher) {

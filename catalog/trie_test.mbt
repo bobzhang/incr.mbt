@@ -19,7 +19,8 @@ test "upstream set membership equality and insertion order" {
 }
 
 ///|
-struct Key(Int32) derive(Eq)
+#derive(Eq)
+struct Key(Int32)
 
 ///|
 impl Hash for Key with fn hash_combine(_self, hasher) {

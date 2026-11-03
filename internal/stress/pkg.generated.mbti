@@ -2,19 +2,19 @@
 package "bobzhang/incr/internal/stress"
 
 // Values
-pub fn collections(UInt, Int) -> Int64 raise
+pub fn collections(UInt32, Int32) -> Int64 raise
 
-pub fn depth(UInt, Int) -> Int64 raise
+pub fn depth(UInt32, Int32) -> Int64 raise
 
-pub fn engine(UInt, Int) -> Int64 raise
+pub fn engine(UInt32, Int32) -> Int64 raise
 
-pub fn growing(UInt, Int) -> Int64 raise
+pub fn growing(UInt32, Int32) -> Int64 raise
 
-pub fn lifecycle(UInt, Int) -> Int64 raise
+pub fn lifecycle(UInt32, Int32) -> Int64 raise
 
-pub fn nominal(UInt, Int) -> Int64 raise
+pub fn nominal(UInt32, Int32) -> Int64 raise
 
-pub fn retained(UInt, Int) -> Int64 raise
+pub fn retained(UInt32, Int32) -> Int64 raise
 
 // Errors
 
