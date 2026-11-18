@@ -21,6 +21,9 @@ test "disposal releases closures values edges and typed cache entries" {
 }
 
 ///|
+// This regression test intentionally observes bucket capacity: checking length
+// alone cannot detect retained backing storage after disposal.
+#warnings("-deprecated")
 test "disposal releases map capacity while families and input handles survive" {
   let e = Engine()
   let memo = Memo(e, (x : Int32) => x)
